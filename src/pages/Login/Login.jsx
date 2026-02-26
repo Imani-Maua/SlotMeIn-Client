@@ -37,8 +37,8 @@ export default function Login() {
                 {/* Header */}
                 <div className={styles.header}>
                     <div className={styles.logo}>
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 16H5V9h14v11zM7 11h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2zm-8 4h2v2H7zm4 0h2v2h-2z" />
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20,20 H40 C40,14 38,4 50,4 C62,4 60,14 60,20 H80 V40 C74,40 64,38 64,50 C64,62 74,60 80,60 V80 H60 C60,74 62,64 50,64 C38,64 40,74 40,80 H20 V60 C14,60 4,62 4,50 C4,38 14,40 20,40 V20Z" />
                         </svg>
                     </div>
                     <h1 className={styles.title}>SlotMeIn</h1>
