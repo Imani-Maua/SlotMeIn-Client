@@ -1,0 +1,57 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-sm;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: $font-size-sm;
+
+    th,
+    td {
+        padding: $space-4;
+        border-bottom: 1px solid $color-border;
+    }
+
+    th {
+        font-weight: $font-weight-semibold;
+        color: rgba($color-navy, 0.7);
+        text-transform: uppercase;
+        font-size: $font-size-xs;
+        letter-spacing: 0.05em;
+        background: $color-bg-surface;
+    }
+
+    tbody tr {
+        transition: background $transition-fast;
+
+        &:last-child td {
+            border-bottom: none;
+        }
+
+        &.clickable {
+            cursor: pointer;
+
+            &:hover {
+                background: rgba($color-navy, 0.02);
+            }
+        }
+    }
+}
+
+.loadingContainer {
+    @include flex-center;
+    padding: $space-16 0;
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    border: 1px solid $color-border;
+}
