@@ -4,7 +4,7 @@ import { createTalent } from '../../api/talentService';
 import { useToast } from '../../components/Toast/Toast';
 import styles from './CreateTalentModal.module.scss';
 
-const ROLES = ['manager', 'assistant manager', 'supervisor', 'bartender', 'server', 'runner', 'hostess', 'job force'];
+const ROLES = ['manager', 'assistant manager', 'supervisor', 'bartender', 'server', 'runner', 'hostess'];
 const CONTRACTS = ['full-time', 'part-time', 'student'];
 
 export default function CreateTalentModal({ isOpen, onClose, onSuccess }) {

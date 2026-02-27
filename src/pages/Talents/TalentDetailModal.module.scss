@@ -12,6 +12,34 @@
     gap: $space-6;
 }
 
+.editBtn {
+    margin-left: auto;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: transparent;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        background: $color-bg-surface;
+        color: $color-navy;
+        border-color: $color-navy;
+    }
+}
+
 .avatar {
     width: 80px;
     height: 80px;
