@@ -1,7 +1,140 @@
 @use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
 
 .page {
-    padding: $space-8;
+    @include flex-column;
+    gap: $space-8;
+    max-width: $container-max-width;
+    margin: 0 auto;
+}
+
+.header {
+    @include flex-between;
+    align-items: flex-end;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    margin-bottom: $space-1;
+}
+
+.subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+}
+
+.generateBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-6;
+    background: $color-gold;
+    color: $color-navy-dark;
+
+    &:hover:not(:disabled) {
+        background: $color-gold-light;
+        box-shadow: $shadow-gold;
+    }
+}
+
+.loader {
+    padding: $space-20 0;
+    @include flex-center;
+}
+
+// ─── Stats ────────────────────────────────────────────────────────────────────
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: $space-6;
+}
+
+.statCard {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $space-6;
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    box-shadow: $shadow-sm;
+}
+
+.statIcon {
+    width: 48px;
+    height: 48px;
+    border-radius: $radius-md;
+    background: $color-navy-subtle;
+    color: $color-navy;
+    @include flex-center;
+    flex-shrink: 0;
+
+    svg {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+.statInfo {
+    @include flex-column;
+}
+
+.statValue {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
     color: $color-text-primary;
-    font-family: $font-sans;
+    line-height: 1.1;
+}
+
+.statLabel {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-top: $space-1;
+}
+
+// ─── Quick Actions ────────────────────────────────────────────────────────────
+.section {
+    @include flex-column;
+    gap: $space-4;
+}
+
+.sectionTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+}
+
+.actionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: $space-6;
+}
+
+.actionCard {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $space-6;
+    cursor: pointer;
+    transition: all $transition-fast;
+    box-shadow: $shadow-sm;
+
+    h3 {
+        font-size: $font-size-base;
+        font-weight: $font-weight-bold;
+        color: $color-navy;
+        margin-bottom: $space-2;
+    }
+
+    p {
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+    }
+
+    &:hover {
+        border-color: $color-gold;
+        box-shadow: $shadow-md;
+        transform: translateY(-2px);
+    }
 }
