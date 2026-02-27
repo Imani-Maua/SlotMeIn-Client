@@ -1,0 +1,16 @@
+@use '../../styles/variables' as *;
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+    background: $color-bg;
+}
+
+.main {
+    flex: 1;
+    margin-left: 240px;
+    min-height: 100vh;
+    overflow-y: auto;
+    padding: $space-8;
+    box-sizing: border-box;
+}
