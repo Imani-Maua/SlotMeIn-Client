@@ -1,8 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ToastProvider } from './components/Toast/Toast';
+import AppLayout from './components/Layout/AppLayout';
 import Login from './pages/Login/Login';
 import AcceptInvite from './pages/AcceptInvite/AcceptInvite';
 import Dashboard from './pages/Dashboard/Dashboard';
+import Talents from './pages/Talents/Talents';
 
 /** Redirects to /login if the user is not authenticated. */
 function ProtectedRoute({ children }) {
@@ -33,15 +36,21 @@ function AppRoutes() {
             />
             <Route path="/accept-invite" element={<AcceptInvite />} />
 
-            {/* Protected placeholder — replace with real dashboard later */}
+            {/* Protected pages wrapped in the shared Layout (Sidebar) */}
             <Route
-                path="/dashboard"
                 element={
                     <ProtectedRoute>
-                        <Dashboard />
+                        <AppLayout />
                     </ProtectedRoute>
                 }
-            />
+            >
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/talents" element={<Talents />} />
+                {/* Placeholders for upcoming pages */}
+                <Route path="/shifts" element={<div>Shift Config Placeholder</div>} />
+                <Route path="/schedule" element={<div>Schedule Placeholder</div>} />
+                <Route path="/admin/users" element={<div>User Admin Placeholder</div>} />
+            </Route>
 
             {/* Catch-all */}
             <Route path="*" element={<Navigate to="/login" replace />} />
@@ -53,7 +62,9 @@ export default function App() {
     return (
         <BrowserRouter>
             <AuthProvider>
-                <AppRoutes />
+                <ToastProvider>
+                    <AppRoutes />
+                </ToastProvider>
             </AuthProvider>
         </BrowserRouter>
     );
