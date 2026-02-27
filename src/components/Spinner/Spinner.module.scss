@@ -1,0 +1,44 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.spinner {
+    border: 3px solid rgba($color-navy, 0.1);
+    border-top: 3px solid $color-navy;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+
+    &.sm {
+        width: 16px;
+        height: 16px;
+        border-width: 2px;
+    }
+
+    &.md {
+        width: 32px;
+        height: 32px;
+        border-width: 3px;
+    }
+
+    &.lg {
+        width: 48px;
+        height: 48px;
+        border-width: 4px;
+    }
+}
+
+.fullScreen {
+    min-height: 200px;
+    height: 100%;
+    width: 100%;
+    @include flex-center;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
