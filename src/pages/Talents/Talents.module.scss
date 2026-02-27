@@ -1,0 +1,170 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+    @include flex-column;
+    gap: $space-6;
+    max-width: $container-max-width;
+    margin: 0 auto;
+}
+
+.header {
+    @include flex-between;
+    align-items: flex-end;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    margin-bottom: $space-1;
+}
+
+.subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+}
+
+.addBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-5;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+// ─── Filters ──────────────────────────────────────────────────────────────────
+.filtersCard {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $space-4 $space-5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-4;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: $shadow-sm;
+}
+
+.searchGroup {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    background: $color-bg;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    padding: 0 $space-4;
+    flex: 1;
+    min-width: 260px;
+    max-width: 400px;
+    transition: border-color $transition-fast;
+
+    &:focus-within {
+        border-color: $color-navy;
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+        color: $color-text-muted;
+    }
+
+    input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        padding: $space-3 0;
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        outline: none;
+
+        &::placeholder {
+            color: $color-text-muted;
+        }
+    }
+}
+
+.filterDropdowns {
+    display: flex;
+    gap: $space-4;
+    flex-wrap: wrap;
+
+    select {
+        @include input-base;
+        width: auto;
+        min-width: 140px;
+        padding-right: $space-8;
+        cursor: pointer;
+        font-size: $font-size-sm;
+        text-transform: capitalize;
+    }
+}
+
+// ─── Table Cell Styles ────────────────────────────────────────────────────────
+.nameCell {
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+}
+
+.badge {
+    display: inline-block;
+    padding: 2px $space-3;
+    background: $color-bg-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    text-transform: capitalize;
+}
+
+.badgeLine {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    text-transform: capitalize;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $space-3;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+
+    &.active {
+        background: $color-success-bg;
+        color: $color-success-dark;
+        border: 1px solid rgba($color-success, 0.2);
+    }
+
+    &.inactive {
+        background: $color-danger-bg;
+        color: $color-danger-dark;
+        border: 1px solid rgba($color-danger, 0.2);
+    }
+}
+
+.constraintsCell {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    color: $color-navy;
+    font-weight: $font-weight-medium;
+    font-size: $font-size-sm;
+    transition: color $transition-fast;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
