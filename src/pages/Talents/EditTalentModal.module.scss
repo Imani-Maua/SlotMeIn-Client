@@ -1,0 +1,120 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.form {
+    @include flex-column;
+    gap: $space-5;
+}
+
+.row {
+    display: flex;
+    gap: $space-4;
+
+    .field {
+        flex: 1;
+    }
+}
+
+.field {
+    @include flex-column;
+    gap: $space-2;
+
+    label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $color-text-primary;
+    }
+
+    input,
+    select {
+        @include input-base;
+    }
+
+    select {
+        text-transform: capitalize;
+        cursor: pointer;
+    }
+}
+
+// ─── Danger Zone ──────────────────────────────────────────────────────────────
+.dangerZone {
+    @include flex-between;
+    align-items: center;
+    padding: $space-4;
+    border: 1px solid rgba($color-danger, 0.3);
+    border-radius: $radius-md;
+    background: $color-danger-bg;
+    gap: $space-4;
+}
+
+.dangerTitle {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-danger-dark;
+    margin-bottom: $space-1;
+}
+
+.dangerDesc {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+}
+
+.deactivateBtn {
+    flex-shrink: 0;
+    padding: $space-2 $space-4;
+    background: transparent;
+    color: $color-danger;
+    border: 1px solid $color-danger;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: background $transition-fast, color $transition-fast;
+
+    &:hover:not(:disabled) {
+        background: $color-danger;
+        color: white;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// ─── Actions ─────────────────────────────────────────────────────────────────
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    padding-top: $space-5;
+    border-top: 1px solid $color-border;
+}
+
+.cancelBtn {
+    padding: $space-3 $space-5;
+    background: transparent;
+    color: $color-text-secondary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover:not(:disabled) {
+        background: $color-bg-surface;
+        color: $color-text-primary;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.submitBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-6;
+}

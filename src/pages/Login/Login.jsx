@@ -20,7 +20,7 @@ export default function Login() {
 
         try {
             const data = await login(username, password);
-            saveAuth(data.access_token, data.role);
+            saveAuth(data.access_token, data.role, data.firstname);
             navigate('/dashboard');
         } catch (err) {
             const detail = err?.response?.data?.detail;

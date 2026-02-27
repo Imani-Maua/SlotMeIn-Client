@@ -1,0 +1,74 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.form {
+    @include flex-column;
+    gap: $space-5;
+}
+
+.row {
+    display: flex;
+    gap: $space-4;
+
+    .field {
+        flex: 1;
+    }
+}
+
+.field {
+    @include flex-column;
+    gap: $space-2;
+
+    label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $color-text-primary;
+    }
+
+    input,
+    select {
+        @include input-base;
+    }
+
+    select {
+        text-transform: capitalize;
+        cursor: pointer;
+    }
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    margin-top: $space-4;
+    padding-top: $space-5;
+    border-top: 1px solid $color-border;
+}
+
+.cancelBtn {
+    padding: $space-3 $space-5;
+    background: transparent;
+    color: $color-text-secondary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: background $transition-fast;
+
+    &:hover:not(:disabled) {
+        background: $color-bg-surface;
+        color: $color-text-primary;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.submitBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-6;
+}

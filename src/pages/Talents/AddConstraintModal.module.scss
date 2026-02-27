@@ -1,0 +1,214 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.container {
+    @include flex-column;
+    gap: $space-5;
+}
+
+.stepContent {
+    @include flex-column;
+    gap: $space-5;
+}
+
+.stepHint {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+
+    strong {
+        color: $color-text-primary;
+        font-weight: $font-weight-semibold;
+    }
+}
+
+// ─── Type Cards (Step 1) ──────────────────────────────────────────────────────
+.typeCards {
+    @include flex-column;
+    gap: $space-3;
+}
+
+.typeCard {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-4;
+    background: $color-bg-card;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    cursor: pointer;
+    text-align: left;
+    transition: all $transition-fast;
+    position: relative;
+    width: 100%;
+
+    &:hover:not(:disabled) {
+        border-color: $color-navy;
+        background: rgba($color-navy, 0.04);
+    }
+
+    &.selected {
+        border-color: $color-navy;
+        background: rgba($color-navy, 0.06);
+        box-shadow: 0 0 0 3px rgba($color-navy, 0.1);
+    }
+
+    &.disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+}
+
+.typeIcon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: $color-bg-surface;
+    border-radius: $radius-sm;
+    color: $color-navy;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+.typeText {
+    @include flex-column;
+    gap: $space-1;
+}
+
+.typeLabel {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+}
+
+.typeDesc {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    line-height: 1.4;
+}
+
+.existsBadge {
+    margin-left: auto;
+    padding: $space-1 $space-2;
+    background: $color-success-bg;
+    color: $color-success-dark;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+}
+
+// ─── Pickers (Step 2) ─────────────────────────────────────────────────────────
+.pickerGroup {
+    @include flex-column;
+    gap: $space-3;
+}
+
+.pickerLabel {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+}
+
+.pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+}
+
+.pill {
+    padding: $space-2 $space-4;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-full;
+    background: $color-bg-card;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover {
+        border-color: $color-navy;
+        color: $color-navy;
+    }
+
+    &.pillActive {
+        background: $color-navy;
+        border-color: $color-navy;
+        color: white;
+    }
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+.backBtn {
+    align-self: flex-start;
+    background: transparent;
+    border: none;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    padding: 0;
+    transition: color $transition-fast;
+
+    &:hover {
+        color: $color-text-primary;
+    }
+}
+
+.actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    padding-top: $space-4;
+    border-top: 1px solid $color-border;
+}
+
+.cancelBtn {
+    padding: $space-3 $space-5;
+    background: transparent;
+    color: $color-text-secondary;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    &:hover:not(:disabled) {
+        background: $color-bg-surface;
+        color: $color-text-primary;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.nextBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-5;
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
+
+.submitBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-5;
+
+    &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+}
