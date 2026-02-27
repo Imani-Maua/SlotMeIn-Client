@@ -1,0 +1,142 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+    @include auth-page;
+    position: relative;
+    overflow: hidden;
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        border-radius: $radius-full;
+        filter: blur(90px);
+        pointer-events: none;
+    }
+
+    &::before {
+        width: 420px;
+        height: 420px;
+        background: $color-navy;
+        opacity: 0.06;
+        top: -160px;
+        left: -160px;
+    }
+
+    &::after {
+        width: 320px;
+        height: 320px;
+        background: $color-gold;
+        opacity: 0.18;
+        bottom: -100px;
+        right: -100px;
+    }
+}
+
+.card {
+    @include auth-card;
+    @include flex-column;
+    gap: $space-8;
+    position: relative;
+    z-index: 1;
+    animation: slideUp 0.4s ease both;
+}
+
+// ─── Header ──────────────────────────────────────────────────────────────────
+.header {
+    @include flex-column;
+    align-items: center;
+    gap: $space-2;
+    text-align: center;
+}
+
+.logo {
+    width: 52px;
+    height: 52px;
+    background: $color-navy;
+    border-radius: $radius-md;
+    @include flex-center;
+    margin-bottom: $space-2;
+    box-shadow: $shadow-md;
+
+    svg {
+        width: 28px;
+        height: 28px;
+        fill: $color-gold;
+    }
+}
+
+.title {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    letter-spacing: -0.02em;
+}
+
+.subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin-top: $space-1;
+}
+
+// ─── Form ────────────────────────────────────────────────────────────────────
+.form {
+    @include flex-column;
+    gap: $space-5;
+}
+
+.formGroup {
+    @include flex-column;
+    gap: $space-2;
+
+    label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        color: $color-navy;
+        letter-spacing: 0.01em;
+    }
+
+    input {
+        @include input-base;
+    }
+}
+
+.submit {
+    @include btn-primary;
+    margin-top: $space-2;
+}
+
+// ─── Error ───────────────────────────────────────────────────────────────────
+.error {
+    background: $color-danger-bg;
+    border: 1px solid rgba($color-danger, 0.25);
+    border-radius: $radius-md;
+    padding: $space-3 $space-4;
+    color: $color-danger;
+    font-size: $font-size-sm;
+    text-align: center;
+    font-weight: $font-weight-medium;
+}
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+.footer {
+    text-align: center;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    border-top: 1px solid $color-border;
+    padding-top: $space-4;
+}
+
+// ─── Animation ───────────────────────────────────────────────────────────────
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

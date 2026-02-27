@@ -1,0 +1,108 @@
+@use 'variables' as *;
+
+// ─── Flex helpers ────────────────────────────────────────────────────────────
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+@mixin flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+// ─── Auth card ───────────────────────────────────────────────────────────────
+@mixin auth-card {
+    width: 100%;
+    max-width: $auth-card-width;
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-xl;
+    padding: $space-10 $space-8;
+    box-shadow: $shadow-lg;
+}
+
+// ─── Form input ──────────────────────────────────────────────────────────────
+@mixin input-base {
+    width: 100%;
+    background: $color-bg;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    padding: $space-3 $space-4;
+    color: $color-text-primary;
+    font-size: $font-size-base;
+    font-family: $font-sans;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    outline: none;
+    box-sizing: border-box;
+
+    &::placeholder {
+        color: $color-text-muted;
+    }
+
+    &:focus {
+        border-color: $color-navy;
+        box-shadow: 0 0 0 3px $color-navy-subtle;
+        background: $color-bg-card;
+    }
+}
+
+// ─── Primary button (navy) ───────────────────────────────────────────────────
+@mixin btn-primary {
+    width: 100%;
+    padding: $space-3 $space-4;
+    background: $color-navy;
+    color: $color-text-inverse;
+    font-size: $font-size-base;
+    font-weight: $font-weight-semibold;
+    font-family: $font-sans;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: background $transition-fast, transform $transition-fast, box-shadow $transition-fast;
+    letter-spacing: 0.02em;
+
+    &:hover:not(:disabled) {
+        background: $color-navy-dark;
+        transform: translateY(-1px);
+        box-shadow: $shadow-md;
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+}
+
+// ─── Full-screen auth page ───────────────────────────────────────────────────
+@mixin auth-page {
+    min-height: 100vh;
+    background: $color-bg;
+    @include flex-center;
+    padding: $space-6;
+    box-sizing: border-box;
+}
+
+// ─── Responsive breakpoints ──────────────────────────────────────────────────
+@mixin mobile {
+    @media (max-width: 480px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (max-width: 768px) {
+        @content;
+    }
+}

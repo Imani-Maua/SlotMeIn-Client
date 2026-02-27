@@ -1,0 +1,70 @@
+@use 'variables' as *;
+@use 'mixins' as *;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+// ─── Reset ───────────────────────────────────────────────────────────────────
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+// ─── Root ────────────────────────────────────────────────────────────────────
+:root {
+    font-family: $font-sans;
+    font-size: $font-size-base;
+    color: $color-text-primary;
+    background-color: $color-bg;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    min-height: 100vh;
+    background-color: $color-bg;
+}
+
+// ─── Typography ──────────────────────────────────────────────────────────────
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: $font-weight-bold;
+    line-height: 1.2;
+    color: $color-text-primary;
+}
+
+p {
+    line-height: 1.6;
+    color: $color-text-secondary;
+}
+
+a {
+    color: $color-navy;
+    text-decoration: none;
+    transition: color $transition-fast;
+
+    &:hover {
+        color: $color-navy-light;
+    }
+}
+
+// ─── Utilities ───────────────────────────────────────────────────────────────
+.text-muted {
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+}
+
+.text-danger {
+    color: $color-danger;
+    font-size: $font-size-sm;
+}
+
+.text-success {
+    color: $color-success;
+    font-size: $font-size-sm;
+}

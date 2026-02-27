@@ -1,0 +1,210 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+@use 'sass:color';
+
+.page {
+    @include auth-page;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        width: 480px;
+        height: 480px;
+        background: $color-gold;
+        border-radius: $radius-full;
+        filter: blur(100px);
+        opacity: 0.14;
+        top: -180px;
+        right: -180px;
+        pointer-events: none;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: $color-navy;
+        border-radius: $radius-full;
+        filter: blur(80px);
+        opacity: 0.06;
+        bottom: -100px;
+        left: -100px;
+        pointer-events: none;
+    }
+}
+
+.card {
+    @include auth-card;
+    @include flex-column;
+    gap: $space-8;
+    position: relative;
+    z-index: 1;
+    animation: slideUp 0.4s ease both;
+}
+
+// ─── Header ──────────────────────────────────────────────────────────────────
+.header {
+    @include flex-column;
+    align-items: center;
+    gap: $space-2;
+    text-align: center;
+}
+
+.icon {
+    width: 52px;
+    height: 52px;
+    background: $color-gold;
+    border-radius: $radius-md;
+    @include flex-center;
+    margin-bottom: $space-2;
+    box-shadow: $shadow-gold;
+
+    svg {
+        width: 28px;
+        height: 28px;
+        fill: $color-navy;
+    }
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+}
+
+.subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.5;
+}
+
+// ─── Form ────────────────────────────────────────────────────────────────────
+.form {
+    @include flex-column;
+    gap: $space-5;
+}
+
+.formGroup {
+    @include flex-column;
+    gap: $space-2;
+
+    label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-semibold;
+        color: $color-navy;
+    }
+
+    input {
+        @include input-base;
+    }
+}
+
+.passwordHint {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    margin-top: -$space-2;
+}
+
+// ─── Gold CTA ────────────────────────────────────────────────────────────────
+.submit {
+    @include btn-primary;
+    background: $color-gold;
+    color: $color-navy;
+    margin-top: $space-2;
+    font-weight: $font-weight-bold;
+
+    &:hover:not(:disabled) {
+        background: $color-gold-light;
+        box-shadow: $shadow-gold;
+        transform: translateY(-1px);
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: not-allowed;
+    }
+}
+
+// ─── Error ───────────────────────────────────────────────────────────────────
+.error {
+    background: $color-danger-bg;
+    border: 1px solid rgba($color-danger, 0.25);
+    border-radius: $radius-md;
+    padding: $space-3 $space-4;
+    color: $color-danger;
+    font-size: $font-size-sm;
+    text-align: center;
+    font-weight: $font-weight-medium;
+}
+
+// ─── Success state ───────────────────────────────────────────────────────────
+.success {
+    @include flex-column;
+    align-items: center;
+    gap: $space-4;
+    text-align: center;
+}
+
+.successIcon {
+    font-size: 3rem;
+}
+
+.successTitle {
+    font-size: $font-size-xl;
+    font-weight: $font-weight-semibold;
+    color: $color-success;
+}
+
+.successText {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+}
+
+.successBtn {
+    @include btn-primary;
+    max-width: 200px;
+    background: $color-navy;
+
+    &:hover:not(:disabled) {
+        background: $color-navy-dark;
+    }
+}
+
+// ─── Missing token state ──────────────────────────────────────────────────────
+.missingToken {
+    @include flex-column;
+    align-items: center;
+    gap: $space-3;
+    text-align: center;
+    color: $color-text-secondary;
+}
+
+.missingTokenIcon {
+    font-size: 2.5rem;
+}
+
+.missingTokenTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-navy;
+}
+
+// ─── Animation ───────────────────────────────────────────────────────────────
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(16px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
