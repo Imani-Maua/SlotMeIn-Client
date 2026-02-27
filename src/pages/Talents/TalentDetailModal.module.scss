@@ -219,6 +219,15 @@
     }
 }
 
+.constraintSubLabel {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-danger-dark;
+    margin: 0 0 $space-2;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
 .rulesList {
     display: flex;
     flex-wrap: wrap;
@@ -226,12 +235,24 @@
 }
 
 .rulePill {
-    background: $color-bg-card;
-    border: 1px solid $color-border;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    background: $color-danger-bg;
+    border: 1px solid rgba($color-danger, 0.25);
     border-radius: $radius-full;
     padding: $space-1 $space-3;
     font-size: $font-size-xs;
     font-weight: $font-weight-medium;
-    color: $color-text-secondary;
+    color: $color-danger-dark;
     box-shadow: $shadow-sm;
+}
+
+.rulePillDot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $color-danger;
+    flex-shrink: 0;
 }
