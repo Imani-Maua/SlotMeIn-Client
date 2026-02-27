@@ -4,7 +4,7 @@ import { updateTalent } from '../../api/talentService';
 import { useToast } from '../../components/Toast/Toast';
 import styles from './EditTalentModal.module.scss';
 
-const ROLES = ['manager', 'assistant manager', 'supervisor', 'bartender', 'server', 'runner', 'hostess', 'job force'];
+const ROLES = ['manager', 'assistant manager', 'supervisor', 'bartender', 'server', 'runner', 'hostess'];
 const CONTRACTS = ['full-time', 'part-time', 'student'];
 
 export default function EditTalentModal({ talent, isOpen, onClose, onSuccess }) {

@@ -8,7 +8,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import CreateTalentModal from './CreateTalentModal';
 import TalentDetailModal from './TalentDetailModal';
 
-const ROLES = ['manager', 'leader', 'bartender', 'server', 'runner', 'hostess', 'job force'];
+const ROLES = ['manager', 'leader', 'bartender', 'server', 'runner', 'hostess'];
 const CONTRACTS = ['full-time', 'part-time', 'student'];
 
 export default function Talents() {
