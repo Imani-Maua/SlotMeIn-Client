@@ -17,13 +17,17 @@ $color-navy-subtle: rgba(27, 42, 94, 0.07); // tinted surface
 
 // ─── Gold / Accent (10%) ─────────────────────────────────────────────────────
 $color-gold: #D4A843; // primary accent
+$color-gold-dark: #B88E2F; // darker accent for text/hover
 $color-gold-light: #E8BF6A; // hover / lighter
 $color-gold-subtle: rgba(212, 168, 67, 0.15); // tinted glow
 
 // ─── Semantic ─────────────────────────────────────────────────────────────────
 $color-danger: #C0392B;
+$color-danger-dark: #962D22;
 $color-danger-bg: rgba(192, 57, 43, 0.08);
+
 $color-success: #1A7A4C;
+$color-success-dark: #125434;
 $color-success-bg: rgba(26, 122, 76, 0.08);
 
 // ─── Text ────────────────────────────────────────────────────────────────────
