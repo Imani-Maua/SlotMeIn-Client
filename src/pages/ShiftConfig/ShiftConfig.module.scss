@@ -1,0 +1,281 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ─── Period colour tokens ─────────────────────────────────────────────────────
+$amber-accent: #F59E0B;
+$amber-bg: rgba(245, 158, 11, 0.06);
+$amber-border: rgba(245, 158, 11, 0.25);
+
+$purple-accent: #8B5CF6;
+$purple-bg: rgba(139, 92, 246, 0.06);
+$purple-border: rgba(139, 92, 246, 0.25);
+
+$navy-accent: $color-navy;
+$navy-bg: rgba($color-navy, 0.04);
+$navy-border: rgba($color-navy, 0.18);
+
+// ─── Page layout ─────────────────────────────────────────────────────────────
+.page {
+    @include flex-column;
+    gap: $space-8;
+    padding: $space-8;
+    max-width: 860px;
+}
+
+.header {
+    @include flex-between;
+    align-items: flex-start;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0 0 $space-1;
+}
+
+.subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    margin: 0;
+}
+
+.addBtn {
+    @include btn-primary;
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-3 $space-5;
+    font-size: $font-size-sm;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    padding: $space-10;
+}
+
+// ─── Period cards ─────────────────────────────────────────────────────────────
+.periodList {
+    @include flex-column;
+    gap: $space-5;
+}
+
+.periodCard {
+    border-radius: $radius-lg;
+    background: $color-bg-card;
+    box-shadow: $shadow-sm;
+    overflow: hidden;
+    border: 1px solid $color-border;
+    border-left-width: 4px;
+}
+
+// Colour variants
+.amber {
+    border-left-color: $amber-accent;
+    background: $amber-bg;
+}
+
+.navy {
+    border-left-color: $navy-accent;
+    background: $navy-bg;
+}
+
+.purple {
+    border-left-color: $purple-accent;
+    background: $purple-bg;
+}
+
+.periodHeader {
+    @include flex-between;
+    align-items: center;
+    padding: $space-5 $space-6;
+    cursor: pointer;
+    user-select: none;
+}
+
+.periodLeft {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+}
+
+.colourDot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &.dot_amber {
+        background: $amber-accent;
+    }
+
+    &.dot_navy {
+        background: $navy-accent;
+    }
+
+    &.dot_purple {
+        background: $purple-accent;
+    }
+}
+
+.periodName {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0 0 $space-1;
+    text-transform: capitalize;
+}
+
+.periodTimes {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+}
+
+.periodActions {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    margin-left: auto;
+    margin-right: $space-4;
+}
+
+.iconBtn {
+    padding: $space-2;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    color: $color-text-muted;
+    transition: all $transition-fast;
+    display: flex;
+    align-items: center;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover {
+        background: $color-danger-bg;
+        border-color: rgba($color-danger, 0.2);
+        color: $color-danger;
+    }
+}
+
+.chevron {
+    width: 18px;
+    height: 18px;
+    color: $color-text-muted;
+    transition: transform $transition-fast;
+
+    &.open {
+        transform: rotate(180deg);
+    }
+}
+
+// ─── Template section ─────────────────────────────────────────────────────────
+.templatesSection {
+    border-top: 1px solid $color-border;
+    padding: $space-4 $space-6 $space-5;
+    @include flex-column;
+    gap: $space-4;
+}
+
+.noTemplates {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    font-style: italic;
+    margin: 0;
+}
+
+.templateTable {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: $font-size-sm;
+
+    th {
+        text-align: left;
+        font-weight: $font-weight-semibold;
+        color: $color-text-muted;
+        font-size: $font-size-xs;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: $space-2 $space-3;
+        border-bottom: 1px solid $color-border;
+    }
+
+    td {
+        padding: $space-3;
+        color: $color-text-primary;
+        border-bottom: 1px solid rgba($color-border, 0.5);
+
+        &:last-child {
+            text-align: right;
+        }
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+}
+
+.roleCell {
+    font-weight: $font-weight-medium;
+    text-transform: capitalize;
+}
+
+.deleteTemplateBtn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: $color-text-muted;
+    padding: $space-1;
+    border-radius: $radius-sm;
+    display: inline-flex;
+    align-items: center;
+    transition: color $transition-fast;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        color: $color-danger;
+    }
+}
+
+.addTemplateBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: transparent;
+    border: 1px dashed $color-border;
+    border-radius: $radius-md;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    cursor: pointer;
+    transition: all $transition-fast;
+    align-self: flex-start;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        border-color: $color-navy;
+        color: $color-navy;
+        background: rgba($color-navy, 0.04);
+    }
+}
