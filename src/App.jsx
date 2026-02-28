@@ -6,6 +6,7 @@ import Login from './pages/Login/Login';
 import AcceptInvite from './pages/AcceptInvite/AcceptInvite';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Talents from './pages/Talents/Talents';
+import ShiftConfig from './pages/ShiftConfig/ShiftConfig';
 
 /** Redirects to /login if the user is not authenticated. */
 function ProtectedRoute({ children }) {
@@ -47,7 +48,7 @@ function AppRoutes() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/talents" element={<Talents />} />
                 {/* Placeholders for upcoming pages */}
-                <Route path="/shifts" element={<div>Shift Config Placeholder</div>} />
+                <Route path="/shifts" element={<ShiftConfig />} />
                 <Route path="/schedule" element={<div>Schedule Placeholder</div>} />
                 <Route path="/admin/users" element={<div>User Admin Placeholder</div>} />
             </Route>
