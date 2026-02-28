@@ -4,7 +4,7 @@ SlotMeIn is an intuitive shift scheduling and talent management platform. It str
 
 ---
 
-## 🚀 Live Demo
+## 🚀 Try Out SlotMeIn
 Experience the live application here: **[SlotMeIn Live Demo](https://slotmein.onrender.com)**  
 
 ### Note
