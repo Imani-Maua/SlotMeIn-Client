@@ -241,9 +241,9 @@ $navy-border: rgba($color-navy, 0.18);
     color: $color-text-muted;
     padding: $space-1;
     border-radius: $radius-sm;
-    display: inline-flex;
+    display: flex;
     align-items: center;
-    transition: color $transition-fast;
+    transition: all $transition-fast;
 
     svg {
         width: 14px;
@@ -251,7 +251,13 @@ $navy-border: rgba($color-navy, 0.18);
     }
 
     &:hover {
-        color: $color-danger;
+        color: $color-navy;
+        background: rgba($color-navy, 0.05);
+
+        &[title="Delete template"] {
+            color: $color-danger;
+            background: $color-danger-bg;
+        }
     }
 }
 
