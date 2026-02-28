@@ -6,10 +6,11 @@ import styles from './Modal.module.scss';
  * @param {boolean} isOpen - controls visibility
  * @param {function} onClose - called when backdrop or X is clicked
  * @param {string} title - modal header title
- * @param {ReactNode} children - modal body content
+ * @param {any} children - modal body content
+ * @param {any} footer - modal footer content
  * @param {string} size - 'sm' | 'md' | 'lg' (default: 'md')
  */
-export default function Modal({ isOpen, onClose, title, children, size = 'md' }) {
+export default function Modal({ isOpen, onClose, title, children, footer, size = 'md' }) {
     // Close on Escape key
     useEffect(() => {
         if (!isOpen) return;
@@ -45,6 +46,13 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
 
                 {/* Body */}
                 <div className={styles.body}>{children}</div>
+
+                {/* Footer */}
+                {footer && (
+                    <div className={styles.footer}>
+                        {footer}
+                    </div>
+                )}
             </div>
         </div>
     );

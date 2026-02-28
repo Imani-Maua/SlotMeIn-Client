@@ -1,0 +1,328 @@
+@use "sass:color";
+@use '../../styles/variables' as *;
+
+.page {
+    padding: $space-8;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: $space-8;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: 700;
+    color: $color-navy;
+    margin-bottom: $space-1;
+}
+
+.subtitle {
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+}
+
+.actions {
+    display: flex;
+    gap: $space-3;
+    align-items: center;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    border-radius: $radius-md;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $transition-fast;
+    border: 1px solid transparent;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.primaryBtn {
+    @extend .btn;
+    background: $color-navy;
+    color: white;
+
+    &:hover {
+        background: color.adjust($color-navy, $lightness: 5%);
+        transform: translateY(-1px);
+        box-shadow: $shadow-md;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+.secondaryBtn {
+    @extend .btn;
+    background: white;
+    color: $color-navy;
+    border-color: $color-border;
+
+    &:hover {
+        background: $color-bg-surface;
+        border-color: color.adjust($color-border, $lightness: -10%);
+    }
+}
+
+.historyBtn {
+    @extend .secondaryBtn;
+
+    .badge {
+        background: $color-navy;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 10px;
+        font-size: 10px;
+    }
+}
+
+.weekSelector {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    background: white;
+    padding: $space-2 $space-4;
+    border-radius: $radius-lg;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-sm;
+}
+
+.dateDisplay {
+    display: flex;
+    flex-direction: column;
+
+    .label {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: $color-text-muted;
+        font-weight: 700;
+    }
+
+    .value {
+        font-size: $font-size-sm;
+        font-weight: 600;
+        color: $color-navy;
+    }
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background: $color-border;
+}
+
+.legend {
+    display: flex;
+    gap: $space-6;
+    margin-bottom: $space-6;
+    padding: $space-3 $space-5;
+    background: white;
+    border-radius: $radius-lg;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-sm;
+    align-self: flex-start;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    color: $color-text-secondary;
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        border-left: 3px solid transparent; // Just for consistency in logic
+    }
+
+    .am {
+        background: rgba(245, 158, 11, 0.1);
+        border-left: 3px solid #F59E0B;
+    }
+
+    .lounge {
+        background: rgba(139, 92, 246, 0.1);
+        border-left: 3px solid #8B5CF6;
+    }
+
+    .pm {
+        background: rgba(27, 42, 94, 0.1);
+        border-left: 3px solid $color-navy;
+    }
+
+    .custom {
+        background: $color-bg-surface;
+        border-left: 3px solid $color-text-muted;
+    }
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 300px;
+}
+
+// Understaffed Alert styles
+.understaffedBanner {
+    margin-bottom: $space-6;
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    border-radius: $radius-lg;
+    padding: $space-4 $space-6;
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+
+    .icon {
+        color: $color-danger;
+        flex-shrink: 0;
+
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+    }
+
+    .content {
+        flex: 1;
+
+        h3 {
+            font-size: $font-size-sm;
+            font-weight: 700;
+            color: #9b2c2c;
+            margin-bottom: 2px;
+        }
+
+        p {
+            font-size: $font-size-xs;
+            color: #c53030;
+        }
+    }
+
+    .viewBtn {
+        background: white;
+        border: 1px solid #feb2b2;
+        color: #9b2c2c;
+        padding: $space-1 $space-3;
+        border-radius: $radius-md;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+            background: #fff5f5;
+        }
+    }
+}
+
+.saveBar {
+    position: fixed;
+    bottom: $space-6;
+    left: 50%;
+    transform: translateX(-50%);
+    background: $color-navy;
+    padding: $space-3 $space-6;
+    border-radius: $radius-full;
+    display: flex;
+    align-items: center;
+    gap: $space-10;
+    box-shadow: 0 10px 30px rgba($color-navy, 0.4);
+    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
+
+    .barInfo {
+        display: flex;
+        align-items: center;
+        gap: $space-3;
+
+        .badge {
+            background: rgba(white, 0.15);
+            color: white;
+            padding: 2px 8px;
+            border-radius: $radius-sm;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+        }
+
+        p {
+            color: rgba(white, 0.9);
+            font-size: $font-size-sm;
+            margin: 0;
+            font-weight: 500;
+        }
+    }
+
+    .barActions {
+        display: flex;
+        gap: $space-2;
+
+        .discardBtn {
+            background: transparent;
+            color: rgba(white, 0.8);
+            border: none;
+            cursor: pointer;
+            padding: $space-2 $space-4;
+            font-size: $font-size-sm;
+            font-weight: 600;
+
+            &:hover {
+                color: white;
+                background: rgba(white, 0.1);
+                border-radius: $radius-full;
+            }
+        }
+
+        .saveBtn {
+            background: white;
+            color: $color-navy;
+            border: none;
+            cursor: pointer;
+            padding: $space-2 $space-6;
+            border-radius: $radius-full;
+            font-size: $font-size-sm;
+            font-weight: 700;
+
+            &:hover {
+                transform: translateY(-1px);
+                box-shadow: $shadow-md;
+            }
+
+            &:disabled {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+        }
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translate(-50%, 100px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, 0);
+        opacity: 1;
+    }
+}

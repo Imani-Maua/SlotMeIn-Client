@@ -7,6 +7,7 @@ import AcceptInvite from './pages/AcceptInvite/AcceptInvite';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Talents from './pages/Talents/Talents';
 import ShiftConfig from './pages/ShiftConfig/ShiftConfig';
+import Schedule from './pages/Schedule/Schedule';
 
 /** Redirects to /login if the user is not authenticated. */
 function ProtectedRoute({ children }) {
@@ -49,7 +50,7 @@ function AppRoutes() {
                 <Route path="/talents" element={<Talents />} />
                 {/* Placeholders for upcoming pages */}
                 <Route path="/shifts" element={<ShiftConfig />} />
-                <Route path="/schedule" element={<div>Schedule Placeholder</div>} />
+                <Route path="/schedule" element={<Schedule />} />
                 <Route path="/admin/users" element={<div>User Admin Placeholder</div>} />
             </Route>
 
