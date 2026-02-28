@@ -4,7 +4,9 @@ import { createTalent } from '../../api/talentService';
 import { useToast } from '../../components/Toast/Toast';
 import styles from './CreateTalentModal.module.scss';
 
-const ROLES = ['manager', 'assistant manager', 'supervisor', 'bartender', 'server', 'runner', 'hostess'];
+import { formatError } from '../../utils/errorUtils';
+
+const ROLES = ['manager', 'leader', 'bartender', 'server', 'runner', 'hostess'];
 const CONTRACTS = ['full-time', 'part-time', 'student'];
 
 export default function CreateTalentModal({ isOpen, onClose, onSuccess }) {
@@ -47,7 +49,7 @@ export default function CreateTalentModal({ isOpen, onClose, onSuccess }) {
             onSuccess(); // Triggers parent to reload the list
             onClose();
         } catch (error) {
-            toast({ message: error.response?.data?.detail || 'Failed to create talent.', type: 'error' });
+            toast({ message: formatError(error), type: 'error' });
             console.error('Create talent error:', error);
         } finally {
             setLoading(false);
