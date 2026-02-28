@@ -10,8 +10,8 @@ const SHIFTS = ['am', 'pm', 'lounge'];
 const CONSTRAINT_TYPES = [
     {
         value: 'availability',
-        label: 'Availability',
-        description: 'Cannot work on specific days — applies all day.',
+        label: 'Working Days',
+        description: 'Select the days this person is available to work.',
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -21,8 +21,8 @@ const CONSTRAINT_TYPES = [
     },
     {
         value: 'shift restriction',
-        label: 'Shift Restriction',
-        description: 'Cannot work a specific shift type, on any day.',
+        label: 'Allowed Shifts',
+        description: 'Select the shift types this person can be assigned.',
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
@@ -31,8 +31,8 @@ const CONSTRAINT_TYPES = [
     },
     {
         value: 'combination',
-        label: 'Combination',
-        description: 'Cannot work a specific shift on specific days.',
+        label: 'Specific Schedule',
+        description: 'Select the exact day + shift combination this person works.',
         icon: (
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
