@@ -3,9 +3,9 @@ import Modal from '../../components/Modal/Modal';
 import { createShiftTemplate } from '../../api/shiftService';
 import { useToast } from '../../components/Toast/Toast';
 import styles from './PeriodModal.module.scss';
-
 import { formatError } from '../../utils/errorUtils';
 
+const PERIOD_LABELS = { am: 'Morning Shift', pm: 'Evening Shift', lounge: 'Lounge' };
 const ROLES = ['manager', 'leader', 'bartender', 'server', 'runner', 'hostess'];
 
 export default function AddTemplateModal({ period, isOpen, onClose, onSuccess }) {
@@ -46,7 +46,7 @@ export default function AddTemplateModal({ period, isOpen, onClose, onSuccess })
             <form onSubmit={handleSubmit} className={styles.form}>
                 {period && (
                     <p className={styles.hint}>
-                        Times must fall within <strong>{period.start_time} → {period.end_time}</strong>.
+                        Times must fall within the <strong>{PERIOD_LABELS[period.shift_name] || period.shift_name}</strong> window: <strong>{period.start_time} → {period.end_time}</strong>.
                         Minimum shift length is 4 hours.
                     </p>
                 )}
