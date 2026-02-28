@@ -164,3 +164,74 @@
         color: $color-border;
     }
 }
+
+// ─── Role Filter Bar ──────────────────────────────────────────────────────────
+.filterBar {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-3 $space-5;
+    border-bottom: 1px solid $color-border;
+    background: $color-bg-surface;
+    flex-wrap: wrap;
+}
+
+.filterLabel {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-text-muted;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+
+.filterPills {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+}
+
+.pill {
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
+    border: 1.5px solid $color-border;
+    background: white;
+    color: $color-text-secondary;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-transform: capitalize;
+
+    &:hover {
+        border-color: $color-navy;
+        color: $color-navy;
+    }
+}
+
+.pillActive {
+    background: $color-navy;
+    border-color: $color-navy;
+    color: white;
+
+    &:hover {
+        background: $color-navy-dark;
+        border-color: $color-navy-dark;
+        color: white;
+    }
+}
+
+.filterCount {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    margin-left: auto;
+}
+
+// ─── No Results ───────────────────────────────────────────────────────────────
+.noResults {
+    padding: $space-10;
+    text-align: center;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    grid-column: 1 / -1;
+}
