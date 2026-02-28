@@ -1,0 +1,166 @@
+@use '../../styles/variables' as *;
+
+.container {
+    background: white;
+    border-radius: $radius-xl;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-md;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 200px repeat(7, 1fr);
+    min-width: 1000px;
+}
+
+.headerCell {
+    padding: $space-4;
+    background: $color-bg-surface;
+    border-bottom: 1px solid $color-border;
+    border-right: 1px solid $color-border;
+    text-align: center;
+
+    .dayName {
+        display: block;
+        font-weight: 700;
+        font-size: $font-size-xs;
+        text-transform: uppercase;
+        color: $color-text-muted;
+        margin-bottom: 2px;
+    }
+
+    .date {
+        font-size: $font-size-sm;
+        font-weight: 600;
+        color: $color-navy;
+    }
+}
+
+.talentHeaderCell {
+    @extend .headerCell;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    color: $color-navy;
+    background: white;
+}
+
+.cell {
+    padding: $space-3;
+    border-right: 1px solid $color-border;
+    border-bottom: 1px solid $color-border;
+    min-height: 80px;
+    background: white;
+    transition: background $transition-fast;
+
+    &:hover {
+        background: rgba($color-navy, 0.02);
+    }
+
+    &:last-child {
+        border-right: none;
+    }
+}
+
+.row {
+    display: contents;
+}
+
+.talentCell {
+    @extend .cell;
+    background: $color-bg-surface;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    .name {
+        font-weight: 600;
+        color: $color-navy;
+        font-size: $font-size-sm;
+    }
+
+    .role {
+        font-size: 10px;
+        text-transform: uppercase;
+        color: $color-text-muted;
+        font-weight: 700;
+    }
+}
+
+.shiftCard {
+    background: white;
+    border-radius: $radius-md;
+    border: 1px solid $color-border;
+    padding: $space-2;
+    box-shadow: $shadow-sm;
+    cursor: pointer;
+    transition: all $transition-fast;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 4px solid $color-border;
+
+    &.am {
+        border-left-color: #F59E0B;
+        background: rgba(245, 158, 11, 0.04);
+
+        &:hover {
+            border-color: #F59E0B;
+        }
+    }
+
+    &.pm {
+        border-left-color: $color-navy;
+        background: rgba(27, 42, 94, 0.04);
+
+        &:hover {
+            border-color: $color-navy;
+        }
+    }
+
+    &.lounge {
+        border-left-color: #8B5CF6;
+        background: rgba(139, 92, 246, 0.04);
+
+        &:hover {
+            border-color: #8B5CF6;
+        }
+    }
+
+    &.custom {
+        border-left-color: $color-text-muted;
+        background: $color-bg-surface;
+    }
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: $shadow-md;
+        border-color: $color-navy;
+    }
+
+    .time {
+        font-size: 11px;
+        font-weight: 600;
+        color: $color-text-primary;
+        text-align: center;
+    }
+}
+
+.emptyCell {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.3;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        color: $color-border;
+    }
+}
