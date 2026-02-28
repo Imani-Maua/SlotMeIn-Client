@@ -8,6 +8,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Talents from './pages/Talents/Talents';
 import ShiftConfig from './pages/ShiftConfig/ShiftConfig';
 import Schedule from './pages/Schedule/Schedule';
+import Users from './pages/Users/Users';
 
 /** Redirects to /login if the user is not authenticated. */
 function ProtectedRoute({ children }) {
@@ -19,6 +20,12 @@ function ProtectedRoute({ children }) {
 function GuestRoute({ children }) {
     const { isAuthenticated } = useAuth();
     return isAuthenticated ? <Navigate to="/dashboard" replace /> : children;
+}
+
+/** Redirects non-superusers back to /dashboard. */
+function SuperuserRoute({ children }) {
+    const { role } = useAuth();
+    return role === 'superuser' ? children : <Navigate to="/dashboard" replace />;
 }
 
 function AppRoutes() {
@@ -51,7 +58,11 @@ function AppRoutes() {
                 {/* Placeholders for upcoming pages */}
                 <Route path="/shifts" element={<ShiftConfig />} />
                 <Route path="/schedule" element={<Schedule />} />
-                <Route path="/admin/users" element={<div>User Admin Placeholder</div>} />
+                <Route path="/admin/users" element={
+                    <SuperuserRoute>
+                        <Users />
+                    </SuperuserRoute>
+                } />
             </Route>
 
             {/* Catch-all */}
