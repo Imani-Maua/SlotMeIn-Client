@@ -77,6 +77,16 @@
     flex: 1;
 }
 
+.footer {
+    padding: $space-4 $space-6;
+    border-top: 1px solid $color-border;
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    background: $color-bg-surface;
+    flex-shrink: 0;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
