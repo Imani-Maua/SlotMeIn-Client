@@ -120,7 +120,11 @@ export default function TalentDetailModal({ talent, isOpen, onClose, onSuccess }
                                     {constraints.map(c => (
                                         <div key={c.type} className={styles.constraintCard}>
                                             <div className={styles.constraintHeader}>
-                                                <span className={styles.constraintType}>{c.type}</span>
+                                                <span className={styles.constraintType}>
+                                                    {c.type === 'availability' && 'Working Days'}
+                                                    {c.type === 'shift restriction' && 'Allowed Shifts'}
+                                                    {c.type === 'combination' && 'Specific Schedule'}
+                                                </span>
                                                 <button
                                                     className={styles.deleteBtn}
                                                     onClick={() => handleDeleteConstraint(c.id)}
@@ -136,9 +140,9 @@ export default function TalentDetailModal({ talent, isOpen, onClose, onSuccess }
                                                 </button>
                                             </div>
                                             <p className={styles.constraintSubLabel}>
-                                                {c.type === 'availability' && 'Not available on:'}
-                                                {c.type === 'shift restriction' && 'Cannot work these shifts:'}
-                                                {c.type === 'combination' && 'Cannot work:'}
+                                                {c.type === 'availability' && 'Available on:'}
+                                                {c.type === 'shift restriction' && 'Allowed shifts:'}
+                                                {c.type === 'combination' && 'Specific schedule:'}
                                             </p>
                                             <div className={styles.rulesList}>
                                                 {c.rules && c.rules.map((rule, idx) => (
