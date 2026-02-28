@@ -4,7 +4,9 @@ import { updateTalent } from '../../api/talentService';
 import { useToast } from '../../components/Toast/Toast';
 import styles from './EditTalentModal.module.scss';
 
-const ROLES = ['manager', 'assistant manager', 'supervisor', 'bartender', 'server', 'runner', 'hostess'];
+import { formatError } from '../../utils/errorUtils';
+
+const ROLES = ['manager', 'leader', 'bartender', 'server', 'runner', 'hostess'];
 const CONTRACTS = ['full-time', 'part-time', 'student'];
 
 export default function EditTalentModal({ talent, isOpen, onClose, onSuccess }) {
@@ -45,7 +47,7 @@ export default function EditTalentModal({ talent, isOpen, onClose, onSuccess }) 
             onSuccess();
             onClose();
         } catch (error) {
-            toast({ message: error.response?.data?.detail || 'Failed to update talent.', type: 'error' });
+            toast({ message: formatError(error), type: 'error' });
         } finally {
             setLoading(false);
         }
@@ -60,7 +62,7 @@ export default function EditTalentModal({ talent, isOpen, onClose, onSuccess }) 
             onSuccess();
             onClose();
         } catch (error) {
-            toast({ message: error.response?.data?.detail || 'Failed to deactivate talent.', type: 'error' });
+            toast({ message: formatError(error), type: 'error' });
         } finally {
             setLoading(false);
         }
