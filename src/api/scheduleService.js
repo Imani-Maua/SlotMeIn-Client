@@ -3,14 +3,25 @@ import axiosInstance from './axios';
 // ─── Schedule Generation & History ───────────────────────────────────────────
 
 export const generateSchedule = async (startDate) => {
-    // startDate should be YYYY-MM-DD
     const response = await axiosInstance.post('/schedule/generate', { start_date: startDate });
     return response.data;
 };
 
-export const commitSchedule = async (data) => {
-    const response = await axiosInstance.post('/schedule/commit', data);
+export const commitSchedule = async (data, scheduleStatus = 'final') => {
+    const response = await axiosInstance.post('/schedule/commit', {
+        ...data,
+        status: scheduleStatus,
+    });
     return response.data;
+};
+
+export const publishSchedule = async (scheduleId) => {
+    const response = await axiosInstance.patch(`/schedule/${scheduleId}/status`, { status: 'final' });
+    return response.data;
+};
+
+export const deleteSchedule = async (scheduleId) => {
+    await axiosInstance.delete(`/schedule/${scheduleId}`);
 };
 
 export const getSchedules = async () => {

@@ -175,3 +175,31 @@
         transform: rotate(360deg);
     }
 }
+
+// ─── Cell context banner ──────────────────────────────────────────────────────
+.contextBanner {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+    background: $color-navy-subtle;
+    border: 1px solid rgba($color-navy, 0.12);
+    border-radius: $radius-md;
+    padding: $space-3 $space-4;
+    margin-bottom: $space-1;
+}
+
+.contextItem {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-navy;
+
+    svg {
+        width: 15px;
+        height: 15px;
+        flex-shrink: 0;
+        opacity: 0.7;
+    }
+}

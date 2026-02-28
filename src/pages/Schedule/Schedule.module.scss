@@ -326,3 +326,259 @@
         opacity: 1;
     }
 }
+
+// ─── History Table ─────────────────────────────────────────────────────────────
+.tableWrapper {
+    background: white;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-sm;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+        background: $color-bg-surface;
+        padding: $space-3 $space-5;
+        font-size: $font-size-xs;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $color-text-muted;
+        text-align: left;
+        border-bottom: 1px solid $color-border;
+    }
+
+    td {
+        padding: $space-4 $space-5;
+        font-size: $font-size-sm;
+        color: $color-text-secondary;
+        border-bottom: 1px solid $color-border;
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: $color-bg-surface;
+    }
+}
+
+.weekCell {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+}
+
+.weekIcon {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-md;
+    background: $color-navy-subtle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $color-navy;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.weekRange {
+    font-weight: 600;
+    color: $color-text-primary;
+}
+
+.latestBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $space-3;
+    background: rgba($color-gold, 0.15);
+    color: $color-gold-dark;
+    border: 1px solid rgba($color-gold, 0.3);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.viewBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-2 $space-4;
+    background: transparent;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-navy;
+    font-size: $font-size-xs;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        background: $color-navy;
+        color: white;
+        border-color: $color-navy;
+    }
+}
+
+// ─── Detail view navigation ────────────────────────────────────────────────────
+.headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+}
+
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    background: none;
+    border: none;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: $space-2;
+    transition: color $transition-fast;
+    align-self: flex-start;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover {
+        color: $color-navy;
+    }
+}
+
+.select {
+    padding: $space-2 $space-3;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    background: white;
+    font-size: $font-size-sm;
+    color: $color-navy;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+}
+
+// ─── Status Badges ────────────────────────────────────────────────────────────
+.badgeFinal {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $space-3;
+    background: rgba(16, 185, 129, 0.12);
+    color: #065f46;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.badgeDraft {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $space-3;
+    background: rgba(245, 158, 11, 0.12);
+    color: #92400e;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+// ─── Title Row (heading + status badge inline) ────────────────────────────────
+.titleRow {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    margin-bottom: $space-1;
+}
+
+// ─── Danger / Delete Button ───────────────────────────────────────────────────
+.dangerBtn {
+    @extend .btn;
+    background: white;
+    color: $color-danger;
+    border-color: rgba($color-danger, 0.4);
+
+    &:hover {
+        background: rgba($color-danger, 0.05);
+        border-color: $color-danger;
+    }
+}
+
+// ─── Draft (amber) save button in save bar ────────────────────────────────────
+.draftBtn {
+    background: rgba(245, 158, 11, 0.15);
+    color: #92400e;
+    border: 1.5px solid rgba(245, 158, 11, 0.4);
+    cursor: pointer;
+    padding: $space-2 $space-5;
+    border-radius: $radius-full;
+    font-size: $font-size-sm;
+    font-weight: 700;
+    transition: all $transition-fast;
+
+    &:hover {
+        background: rgba(245, 158, 11, 0.25);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+// ─── History table row actions ────────────────────────────────────────────────
+.rowActions {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    justify-content: flex-end;
+}
+
+.deleteRowBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        background: rgba($color-danger, 0.05);
+        border-color: $color-danger;
+        color: $color-danger;
+    }
+}

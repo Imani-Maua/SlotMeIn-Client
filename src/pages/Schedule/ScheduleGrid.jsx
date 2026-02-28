@@ -6,11 +6,12 @@ import styles from './ScheduleGrid.module.scss';
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
-export default function ScheduleGrid({ schedule, onRefresh }) {
+export default function ScheduleGrid({ schedule, isDraft, onRefresh, onUpdateDraft }) {
     const [talents, setTalents] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [selectedAssignment, setSelectedAssignment] = useState(null); // { assignment, dateStr, talentId }
+    const [selectedAssignment, setSelectedAssignment] = useState(null);
     const [isAssignmentModalOpen, setIsAssignmentModalOpen] = useState(false);
+    const [roleFilter, setRoleFilter] = useState('all');
 
     useEffect(() => {
         fetchTalents();
@@ -19,7 +20,6 @@ export default function ScheduleGrid({ schedule, onRefresh }) {
     async function fetchTalents() {
         try {
             const data = await getTalents();
-            // Only show active talents in the schedule grid
             setTalents(data.filter(t => t.is_active));
         } catch (error) {
             console.error('Failed to fetch talents', error);
@@ -30,6 +30,14 @@ export default function ScheduleGrid({ schedule, onRefresh }) {
 
     if (loading) return <div className={styles.center}><Spinner /></div>;
 
+    // Derive unique roles from active talents for the filter
+    const roles = ['all', ...Array.from(new Set(talents.map(t => t.tal_role).filter(Boolean))).sort()];
+
+    // Apply role filter
+    const visibleTalents = roleFilter === 'all'
+        ? talents
+        : talents.filter(t => t.tal_role === roleFilter);
+
     // Get dates for the header
     const weekDates = [];
     const startDate = new Date(schedule.week_start);
@@ -39,7 +47,7 @@ export default function ScheduleGrid({ schedule, onRefresh }) {
         weekDates.push(d);
     }
 
-    // Map assignments for easy lookup: { [talent_id]: { [date_string]: [assignment] } }
+    // Map assignments: { [talent_id]: { [date_string]: assignment } }
     const assignmentMap = {};
     schedule.assignments.forEach(a => {
         if (!assignmentMap[a.talent_id]) assignmentMap[a.talent_id] = {};
@@ -53,6 +61,28 @@ export default function ScheduleGrid({ schedule, onRefresh }) {
 
     return (
         <div className={styles.container}>
+            {/* ── Role Filter Bar ────────────────────────────────────────── */}
+            <div className={styles.filterBar}>
+                <span className={styles.filterLabel}>Filter by role:</span>
+                <div className={styles.filterPills}>
+                    {roles.map(role => (
+                        <button
+                            key={role}
+                            className={`${styles.pill} ${roleFilter === role ? styles.pillActive : ''}`}
+                            onClick={() => setRoleFilter(role)}
+                        >
+                            {role === 'all' ? 'All Roles' : role.charAt(0).toUpperCase() + role.slice(1)}
+                        </button>
+                    ))}
+                </div>
+                {roleFilter !== 'all' && (
+                    <span className={styles.filterCount}>
+                        {visibleTalents.length} staff member{visibleTalents.length !== 1 ? 's' : ''}
+                    </span>
+                )}
+            </div>
+
+            {/* ── Grid ──────────────────────────────────────────────────── */}
             <div className={styles.grid}>
                 {/* Header */}
                 <div key="header-staff" className={styles.talentHeaderCell}>Staff Member</div>
@@ -65,8 +95,8 @@ export default function ScheduleGrid({ schedule, onRefresh }) {
                     </div>
                 ))}
 
-                {/* Rows for each talent */}
-                {talents.map(talent => (
+                {/* Rows for each visible talent */}
+                {visibleTalents.map(talent => (
                     <div key={talent.id} className={styles.row}>
                         <div className={styles.talentCell}>
                             <span className={styles.name}>{talent.firstname} {talent.lastname}</span>
@@ -87,7 +117,11 @@ export default function ScheduleGrid({ schedule, onRefresh }) {
                             };
 
                             return (
-                                <div key={`cell-${talent.id}-${i}`} className={styles.cell} onClick={() => handleCellClick(talent.id, dateStr, assignment)}>
+                                <div
+                                    key={`cell-${talent.id}-${i}`}
+                                    className={styles.cell}
+                                    onClick={() => handleCellClick(talent.id, dateStr, assignment)}
+                                >
                                     {assignment ? (
                                         <div className={`${styles.shiftCard} ${getShiftClass(assignment.shift_name)}`}>
                                             <div className={styles.time}>
@@ -106,23 +140,28 @@ export default function ScheduleGrid({ schedule, onRefresh }) {
                         })}
                     </div>
                 ))}
+
+                {visibleTalents.length === 0 && (
+                    <div className={styles.noResults} style={{ gridColumn: `1 / ${weekDates.length + 2}` }}>
+                        No staff members match the selected role.
+                    </div>
+                )}
             </div>
 
             <AssignmentModal
                 assignment={selectedAssignment?.assignment}
                 dateOf={selectedAssignment?.dateStr}
+                talentId={selectedAssignment?.talentId}
                 scheduleId={schedule.id}
                 isOpen={isAssignmentModalOpen}
                 onClose={() => setIsAssignmentModalOpen(false)}
                 onSuccess={(newAssignment, isDeletion) => {
                     setIsAssignmentModalOpen(false);
-                    if (schedule.id === 'draft' || !schedule.id) {
-                        // We are in a draft! Update local assignments
+                    if (isDraft) {
                         let newAssignments;
                         if (isDeletion) {
                             newAssignments = schedule.assignments.filter(a => a !== selectedAssignment.assignment);
                         } else {
-                            // Find if we are updating existing or adding new
                             const existingIdx = schedule.assignments.findIndex(a => a === selectedAssignment.assignment);
                             if (existingIdx >= 0) {
                                 newAssignments = [...schedule.assignments];

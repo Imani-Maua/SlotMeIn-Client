@@ -65,7 +65,7 @@ export default function Sidebar() {
     const { logout, role } = useAuth();
     const navigate = useNavigate();
 
-    const isAdmin = role === 'superuser' || role === 'admin';
+    const isAdmin = role === 'superuser';
 
     function handleLogout() {
         logout();

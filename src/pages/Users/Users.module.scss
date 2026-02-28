@@ -1,0 +1,289 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+    @include flex-column;
+    gap: $space-6;
+    max-width: $container-max-width;
+    margin: 0 auto;
+}
+
+.header {
+    @include flex-between;
+    align-items: flex-end;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    margin-bottom: $space-1;
+}
+
+.subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+}
+
+.primaryBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-5;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    padding: $space-12;
+}
+
+// ─── Table ─────────────────────────────────────────────────────────────────────
+.tableWrapper {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-sm;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+        background: $color-bg-surface;
+        padding: $space-3 $space-5;
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $color-text-muted;
+        text-align: left;
+        border-bottom: 1px solid $color-border;
+    }
+
+    td {
+        padding: $space-4 $space-5;
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        border-bottom: 1px solid $color-border;
+        vertical-align: middle;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    tr:hover td {
+        background: $color-bg-surface;
+    }
+}
+
+.nameCell {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    font-weight: $font-weight-semibold;
+}
+
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: $radius-full;
+    background: $color-navy;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+    text-transform: uppercase;
+}
+
+.mono {
+    font-family: monospace;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+}
+
+// ─── Badges ────────────────────────────────────────────────────────────────────
+.roleBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $space-3;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.roleSuperuser {
+    background: rgba($color-gold, 0.18);
+    color: $color-gold-dark;
+    border: 1px solid rgba($color-gold, 0.35);
+}
+
+.roleManager {
+    background: rgba($color-navy, 0.1);
+    color: $color-navy;
+    border: 1px solid rgba($color-navy, 0.2);
+}
+
+.roleDefault {
+    background: $color-bg-surface;
+    color: $color-text-secondary;
+    border: 1px solid $color-border;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px $space-3;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.statusActive {
+    background: $color-success-bg;
+    color: $color-success-dark;
+    border: 1px solid rgba($color-success, 0.25);
+}
+
+.statusPending {
+    background: rgba(245, 158, 11, 0.12);
+    color: #92400E;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+// ─── Actions ───────────────────────────────────────────────────────────────────
+.inviteBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    border: 1.5px solid $color-navy;
+    border-radius: $radius-md;
+    background: transparent;
+    color: $color-navy;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    cursor: pointer;
+    transition: background $transition-fast, color $transition-fast;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover:not(:disabled) {
+        background: $color-navy;
+        color: #fff;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.invitingText {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+}
+
+.activeLabel {
+    font-size: $font-size-xs;
+    color: $color-success-dark;
+    font-weight: $font-weight-semibold;
+}
+
+.emptyState {
+    padding: $space-12;
+    text-align: center;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+}
+
+// ─── Form ──────────────────────────────────────────────────────────────────────
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+}
+
+.formHint {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    background: $color-bg-surface;
+    border-radius: $radius-md;
+    padding: $space-3 $space-4;
+    margin-bottom: $space-2;
+    line-height: 1.5;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: $space-2;
+
+    label {
+        font-size: $font-size-sm;
+        font-weight: $font-weight-medium;
+        color: $color-text-primary;
+    }
+
+    input,
+    select {
+        @include input-base;
+    }
+}
+
+.cancelBtn {
+    width: auto;
+    padding: $space-2 $space-5;
+    background: transparent;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    color: $color-text-secondary;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    font-family: $font-sans;
+    cursor: pointer;
+    transition: border-color $transition-fast;
+
+    &:hover:not(:disabled) {
+        border-color: $color-navy;
+        color: $color-navy;
+    }
+}
+
+.submitBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-2 $space-5;
+
+    &:disabled {
+        opacity: 0.55;
+        cursor: not-allowed;
+    }
+}
