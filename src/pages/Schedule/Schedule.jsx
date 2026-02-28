@@ -10,6 +10,7 @@ import Spinner from '../../components/Spinner/Spinner';
 import EmptyState from '../../components/EmptyState/EmptyState';
 import GenerateScheduleModal from './GenerateScheduleModal';
 import ScheduleGrid from './ScheduleGrid';
+import DraftScheduleGrid from './DraftScheduleGrid';
 import { formatError } from '../../utils/errorUtils';
 import styles from './Schedule.module.scss';
 
@@ -177,10 +178,19 @@ export default function Schedule() {
     const handleCommit = async (scheduleStatus) => {
         setIsSaving(true);
         try {
+            // Normalise assignments: strip temp/preview IDs, keep only backend-needed fields
+            const cleanAssignments = (draftSchedule.assignments || []).map(a => ({
+                talent_id: a.talent_id,
+                date_of: a.date_of,
+                start_time: a.start_time,
+                end_time: a.end_time,
+                shift_name: a.shift_name || null,
+            }));
+
             const saved = await commitSchedule({
                 week_start: draftSchedule.week_start,
                 week_end: draftSchedule.week_end,
-                assignments: draftSchedule.assignments,
+                assignments: cleanAssignments,
             }, scheduleStatus);
             toast({
                 message: scheduleStatus === 'draft'
@@ -309,6 +319,17 @@ export default function Schedule() {
                         </button>
                     )}
 
+                    {/* Save Draft — only for in-memory drafts in header for quick access */}
+                    {isMemoryDraft && (
+                        <button
+                            className={styles.draftBtn}
+                            onClick={() => handleCommit('draft')}
+                            disabled={isSaving}
+                        >
+                            {isSaving ? 'Saving…' : 'Save Draft'}
+                        </button>
+                    )}
+
                     {/* Publish draft — only for saved drafts */}
                     {isSavedDraft && (
                         <button
@@ -329,25 +350,37 @@ export default function Schedule() {
                 </div>
             </div>
 
-            {/* ── Legend ──────────────────────────────────────────────────── */}
-            <div className={styles.legend}>
-                <div className={styles.legendItem}><span className={`${styles.dot} ${styles.am}`}></span><span>Morning (AM)</span></div>
-                <div className={styles.legendItem}><span className={`${styles.dot} ${styles.lounge}`}></span><span>Lounge</span></div>
-                <div className={styles.legendItem}><span className={`${styles.dot} ${styles.pm}`}></span><span>Evening (PM)</span></div>
-            </div>
+
 
 
             {/* ── Grid ────────────────────────────────────────────────────── */}
             {detailLoading ? (
                 <div className={styles.center}><Spinner /></div>
-            ) : (
-                <ScheduleGrid
-                    key={draftSchedule ? 'draft' : currentSchedule?.id}
+            ) : (isMemoryDraft || isSavedDraft) ? (
+                <DraftScheduleGrid
+                    key={isMemoryDraft ? 'memory-draft' : `saved-draft-${currentSchedule?.id}`}
                     schedule={activeSchedule}
                     isDraft={isMemoryDraft}
-                    onRefresh={() => !draftSchedule && openSchedule(currentSchedule.id)}
+                    talents={talents}
                     onUpdateDraft={(updated) => setDraftSchedule(updated)}
+                    onRefresh={() => currentSchedule && openSchedule(currentSchedule.id)}
                 />
+            ) : (
+                <>
+                    {/* Shift-period legend only for published view */}
+                    <div className={styles.legend}>
+                        <div className={styles.legendItem}><span className={`${styles.dot} ${styles.am}`}></span><span>Morning (AM)</span></div>
+                        <div className={styles.legendItem}><span className={`${styles.dot} ${styles.lounge}`}></span><span>Lounge</span></div>
+                        <div className={styles.legendItem}><span className={`${styles.dot} ${styles.pm}`}></span><span>Evening (PM)</span></div>
+                    </div>
+                    <ScheduleGrid
+                        key={currentSchedule?.id}
+                        schedule={activeSchedule}
+                        isDraft={false}
+                        onRefresh={() => openSchedule(currentSchedule.id)}
+                        onUpdateDraft={null}
+                    />
+                </>
             )}
 
             {/* ── In-memory draft save bar ─────────────────────────────── */}
