@@ -1,0 +1,794 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ─── Page Layout ─────────────────────────────────────────────────────────────
+
+.page {
+    @include flex-column;
+    gap: $space-6;
+    max-width: $container-max-width;
+    margin: 0 auto;
+}
+
+.header {
+    @include flex-between;
+    align-items: flex-end;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    margin-bottom: $space-1;
+}
+
+.subtitle {
+    font-size: $font-size-base;
+    color: $color-text-secondary;
+}
+
+.addBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-3 $space-5;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+// ─── Stats Row ───────────────────────────────────────────────────────────────
+
+.statsRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $space-4;
+
+    @include tablet {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.statCard {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $space-5 $space-6;
+    @include flex-column;
+    gap: $space-1;
+    box-shadow: $shadow-sm;
+    transition: box-shadow $transition-fast;
+
+    &:hover {
+        box-shadow: $shadow-md;
+    }
+}
+
+.statValue {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    line-height: 1;
+}
+
+.statValueWarning {
+    color: $color-gold-dark;
+}
+
+.statValueSuccess {
+    color: $color-success;
+}
+
+.statLabel {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    font-weight: $font-weight-medium;
+}
+
+// ─── Filters ─────────────────────────────────────────────────────────────────
+
+.filtersCard {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $space-4 $space-5;
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-4;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: $shadow-sm;
+}
+
+.searchGroup {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    background: $color-bg;
+    border: 1.5px solid $color-border;
+    border-radius: $radius-md;
+    padding: 0 $space-4;
+    flex: 1;
+    min-width: 220px;
+    max-width: 380px;
+    transition: border-color $transition-fast;
+
+    &:focus-within {
+        border-color: $color-navy;
+    }
+
+    svg {
+        width: 18px;
+        height: 18px;
+        color: $color-text-muted;
+        flex-shrink: 0;
+    }
+
+    input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        padding: $space-3 0;
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        outline: none;
+
+        &::placeholder {
+            color: $color-text-muted;
+        }
+    }
+}
+
+.filterPills {
+    display: flex;
+    gap: $space-2;
+    flex-wrap: wrap;
+}
+
+.filterPill {
+    padding: $space-2 $space-4;
+    border-radius: $radius-full;
+    border: 1.5px solid $color-border;
+    background: transparent;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-secondary;
+    cursor: pointer;
+    transition: all $transition-fast;
+    font-family: $font-sans;
+
+    &:hover {
+        border-color: $color-navy;
+        color: $color-navy;
+    }
+}
+
+.filterPillActive {
+    background: $color-navy;
+    border-color: $color-navy;
+    color: $color-text-inverse;
+
+    &:hover {
+        background: $color-navy-dark;
+        color: $color-text-inverse;
+    }
+}
+
+// ─── Center Spinner ───────────────────────────────────────────────────────────
+
+.centerSpinner {
+    @include flex-center;
+    padding: $space-16;
+}
+
+// ─── Talent List ─────────────────────────────────────────────────────────────
+
+.talentList {
+    @include flex-column;
+    gap: $space-3;
+}
+
+// ─── Talent Card ─────────────────────────────────────────────────────────────
+
+.talentCard {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    box-shadow: $shadow-sm;
+    transition: box-shadow $transition-fast, border-color $transition-fast;
+
+    &:hover {
+        box-shadow: $shadow-md;
+    }
+}
+
+.talentCardConstrained {
+    border-left: 3px solid $color-gold;
+}
+
+// ─── Talent Row ──────────────────────────────────────────────────────────────
+
+.talentRow {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-4 $space-5;
+}
+
+.avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: $radius-full;
+    background: $color-navy-subtle;
+    color: $color-navy;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    @include flex-center;
+    text-transform: uppercase;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+}
+
+.talentInfo {
+    @include flex-column;
+    gap: $space-1;
+    flex: 1;
+    min-width: 0;
+}
+
+.talentName {
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    font-size: $font-size-base;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.talentMeta {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+}
+
+.metaBadge {
+    display: inline-block;
+    padding: 1px $space-2;
+    background: rgba($color-gold, 0.12);
+    color: $color-gold-dark;
+    border: 1px solid rgba($color-gold, 0.25);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    text-transform: capitalize;
+}
+
+.metaDot {
+    display: inline-block;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: $color-text-muted;
+}
+
+.metaText {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-transform: capitalize;
+}
+
+.countArea {
+    flex-shrink: 0;
+}
+
+.constraintCount {
+    display: inline-flex;
+    align-items: center;
+    padding: $space-1 $space-3;
+    background: rgba($color-gold, 0.1);
+    color: $color-gold-dark;
+    border: 1px solid rgba($color-gold, 0.25);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+}
+
+.noConstraintsBadge {
+    display: inline-flex;
+    align-items: center;
+    padding: $space-1 $space-3;
+    background: $color-success-bg;
+    color: $color-success;
+    border: 1px solid rgba($color-success, 0.2);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+}
+
+// ─── Row Actions ─────────────────────────────────────────────────────────────
+
+.rowActions {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+}
+
+.addRuleBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-1;
+    padding: $space-2 $space-3;
+    background: transparent;
+    border: 1.5px solid $color-navy;
+    border-radius: $radius-md;
+    color: $color-navy;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    font-family: $font-sans;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover:not(:disabled) {
+        background: $color-navy;
+        color: $color-text-inverse;
+    }
+
+    &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+        border-color: $color-border;
+        color: $color-text-muted;
+    }
+}
+
+.expandBtn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-md;
+    border: 1.5px solid $color-border;
+    background: transparent;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition: all $transition-fast;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        transition: transform $transition-fast;
+    }
+
+    &:hover {
+        border-color: $color-navy;
+        color: $color-navy;
+        background: $color-navy-subtle;
+    }
+}
+
+.expandBtnOpen {
+    border-color: $color-navy;
+    color: $color-navy;
+    background: $color-navy-subtle;
+
+    svg {
+        transform: rotate(180deg);
+    }
+}
+
+// ─── Constraint Previews (collapsed, always-visible summary) ──────────────────
+
+.constraintPreviews {
+    padding: 0 $space-5 $space-4;
+    @include flex-column;
+    gap: $space-2;
+    border-top: 1px solid $color-bg-surface;
+    padding-top: $space-3;
+}
+
+.previewChip {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-3;
+}
+
+.previewIcon {
+    display: flex;
+    align-items: center;
+    color: $color-navy;
+    flex-shrink: 0;
+    margin-top: 1px;
+
+    svg {
+        width: 15px;
+        height: 15px;
+    }
+}
+
+.previewLabel {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-navy;
+    white-space: nowrap;
+    min-width: 120px;
+    padding-top: 2px;
+}
+
+.previewRules {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-1;
+}
+
+.rulePill {
+    display: inline-flex;
+    align-items: center;
+    padding: 1px $space-2;
+    background: $color-success-bg;
+    border: 1px solid rgba($color-success, 0.2);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-success-dark;
+}
+
+// ─── Expanded Constraint Detail ───────────────────────────────────────────────
+
+.expandedConstraints {
+    border-top: 1px solid $color-border;
+    padding: $space-4 $space-5;
+    background: $color-bg;
+    @include flex-column;
+    gap: $space-4;
+    animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.constraintBlock {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    padding: $space-4;
+}
+
+.constraintBlockHeader {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    margin-bottom: $space-3;
+}
+
+.constraintBlockIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: $radius-md;
+    background: $color-navy-subtle;
+    color: $color-navy;
+    flex-shrink: 0;
+
+    svg {
+        width: 17px;
+        height: 17px;
+    }
+}
+
+.constraintBlockInfo {
+    @include flex-column;
+    gap: 2px;
+    flex: 1;
+}
+
+.constraintBlockType {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+}
+
+.constraintBlockSub {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-success;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.deleteBtn {
+    background: transparent;
+    border: none;
+    color: $color-text-muted;
+    cursor: pointer;
+    transition: color $transition-fast;
+    padding: $space-1;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    &:hover:not(:disabled) {
+        color: $color-danger;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.deletingDots {
+    font-size: $font-size-lg;
+    color: $color-text-muted;
+    letter-spacing: 2px;
+}
+
+.rulesList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $space-2;
+}
+
+.rulePillExpanded {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    background: $color-success-bg;
+    border: 1px solid rgba($color-success, 0.25);
+    border-radius: $radius-full;
+    padding: $space-1 $space-3;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-medium;
+    color: $color-success-dark;
+    box-shadow: $shadow-sm;
+}
+
+.rulePillDot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $color-success-dark;
+    flex-shrink: 0;
+}
+
+// ─── Talent Picker Modal ──────────────────────────────────────────────────────
+
+.pickerOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 27, 62, 0.45);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    @include flex-center;
+    padding: $space-4;
+    animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.pickerModal {
+    background: $color-bg-card;
+    border-radius: $radius-xl;
+    width: 100%;
+    max-width: 480px;
+    max-height: 85vh;
+    @include flex-column;
+    overflow: hidden;
+    box-shadow: $shadow-lg;
+    animation: scaleIn 0.2s ease;
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.96) translateY(8px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.pickerHeader {
+    @include flex-between;
+    padding: $space-5 $space-6;
+    border-bottom: 1px solid $color-border;
+}
+
+.pickerTitle {
+    font-size: $font-size-lg;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    margin: 0;
+}
+
+.pickerClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: $color-bg-surface;
+    border-radius: $radius-md;
+    cursor: pointer;
+    color: $color-text-muted;
+    transition: all $transition-fast;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        background: $color-danger-bg;
+        color: $color-danger;
+    }
+}
+
+.pickerSearch {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-4 $space-5;
+    background: $color-bg;
+    border-bottom: 1px solid $color-border;
+
+    svg {
+        width: 17px;
+        height: 17px;
+        color: $color-text-muted;
+        flex-shrink: 0;
+    }
+
+    input {
+        flex: 1;
+        border: none;
+        background: transparent;
+        font-size: $font-size-sm;
+        color: $color-text-primary;
+        outline: none;
+
+        &::placeholder { color: $color-text-muted; }
+    }
+}
+
+.pickerList {
+    overflow-y: auto;
+    flex: 1;
+    padding: $space-2 0;
+}
+
+.pickerEmpty {
+    text-align: center;
+    color: $color-text-muted;
+    font-size: $font-size-sm;
+    padding: $space-8;
+}
+
+.pickerItem {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+    padding: $space-3 $space-5;
+    width: 100%;
+    border: none;
+    background: transparent;
+    text-align: left;
+    cursor: pointer;
+    transition: background $transition-fast;
+    font-family: $font-sans;
+
+    &:hover:not(:disabled) {
+        background: $color-bg-surface;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+.pickerItemFull {
+    opacity: 0.45;
+}
+
+.pickerAvatar {
+    width: 40px;
+    height: 40px;
+    border-radius: $radius-full;
+    background: $color-navy-subtle;
+    color: $color-navy;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    @include flex-center;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.pickerItemInfo {
+    @include flex-column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.pickerItemName {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+}
+
+.pickerItemMeta {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    text-transform: capitalize;
+}
+
+.pickerItemRight {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    flex-shrink: 0;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        color: $color-text-muted;
+    }
+}
+
+.pickerFullBadge {
+    display: inline-flex;
+    padding: 2px $space-2;
+    background: $color-bg-surface;
+    border: 1px solid $color-border;
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+}
+
+.pickerCountBadge {
+    display: inline-flex;
+    padding: 2px $space-2;
+    background: rgba($color-gold, 0.1);
+    border: 1px solid rgba($color-gold, 0.25);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    color: $color-gold-dark;
+}
+
+.pickerNoneBadge {
+    display: inline-flex;
+    padding: 2px $space-2;
+    background: $color-success-bg;
+    border: 1px solid rgba($color-success, 0.2);
+    border-radius: $radius-full;
+    font-size: $font-size-xs;
+    color: $color-success;
+}
