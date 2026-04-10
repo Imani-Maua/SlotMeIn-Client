@@ -9,6 +9,7 @@ import Talents from './pages/Talents/Talents';
 import ShiftConfig from './pages/ShiftConfig/ShiftConfig';
 import Schedule from './pages/Schedule/Schedule';
 import Users from './pages/Users/Users';
+import Constraints from './pages/Constraints/Constraints';
 
 /** Redirects to /login if the user is not authenticated. */
 function ProtectedRoute({ children }) {
@@ -58,6 +59,7 @@ function AppRoutes() {
                 {/* Placeholders for upcoming pages */}
                 <Route path="/shifts" element={<ShiftConfig />} />
                 <Route path="/schedule" element={<Schedule />} />
+                <Route path="/constraints" element={<Constraints />} />
                 <Route path="/admin/users" element={
                     <SuperuserRoute>
                         <Users />
