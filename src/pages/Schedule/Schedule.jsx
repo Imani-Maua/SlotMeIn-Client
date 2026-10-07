@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
     getSchedules, getSchedule, commitSchedule,
-    publishSchedule, deleteSchedule
+    publishSchedule, deleteSchedule, getJobResult
 } from '../../api/scheduleService';
 import { getTalents } from '../../api/talentService';
 import { exportScheduleToPDF } from '../../utils/exportSchedule';
@@ -123,6 +123,7 @@ export default function Schedule() {
     const [loading, setLoading] = useState(true);
     const [detailLoading, setDetailLoading] = useState(false);
     const [isGenerateOpen, setIsGenerateOpen] = useState(false);
+    const [pendingJobId,   setPendingJobId]   = useState(null);
     const [isSaving, setIsSaving] = useState(false);
     const [isPublishing, setIsPublishing] = useState(false);
 
@@ -140,6 +141,48 @@ export default function Schedule() {
     }, []);
 
     useEffect(() => { fetchSchedules(); }, [fetchSchedules]);
+
+    // Background polling — runs without blocking the UI
+    useEffect(() => {
+        if (!pendingJobId) return;
+        let cancelled = false;
+        const INTERVAL_MS = 2000;
+        const deadline = Date.now() + 90_000;
+
+        const check = async () => {
+            if (cancelled) return;
+            if (Date.now() > deadline) {
+                toast({ message: 'Schedule generation timed out. Try again.', type: 'error' });
+                setPendingJobId(null);
+                return;
+            }
+            try {
+                const data = await getJobResult(pendingJobId);
+                if (data.status === 'done') {
+                    if (!cancelled) {
+                        handleGenerated(data.result);
+                        toast({ message: 'Schedule is ready!', type: 'success' });
+                        setPendingJobId(null);
+                    }
+                } else if (data.status === 'failed') {
+                    if (!cancelled) {
+                        toast({ message: data.error || 'Schedule generation failed.', type: 'error' });
+                        setPendingJobId(null);
+                    }
+                } else {
+                    setTimeout(check, INTERVAL_MS);
+                }
+            } catch (err) {
+                if (!cancelled) {
+                    toast({ message: 'Could not reach server while polling.', type: 'error' });
+                    setPendingJobId(null);
+                }
+            }
+        };
+
+        setTimeout(check, INTERVAL_MS);
+        return () => { cancelled = true; };
+    }, [pendingJobId]); // eslint-disable-line react-hooks/exhaustive-deps
 
     async function openSchedule(id) {
         setDetailLoading(true);
@@ -163,8 +206,11 @@ export default function Schedule() {
     const handleGenerated = (previewData) => {
         setDraftSchedule(previewData);
         setCurrentSchedule(null);
-        setIsGenerateOpen(false);
-        toast({ message: 'Schedule generated. Review and save when ready.', type: 'info' });
+    };
+
+    const handleJobStarted = (jobId) => {
+        setPendingJobId(jobId);
+        toast({ message: 'Generating schedule in the background…', type: 'info' });
     };
 
     const handleDiscard = () => {
@@ -244,10 +290,19 @@ export default function Schedule() {
     // ── Initial loading ───────────────────────────────────────────────────────
     if (loading) return <div className={styles.center}><Spinner /></div>;
 
+    const generatingBanner = pendingJobId && (
+        <div className={styles.generatingBanner}>
+            <Spinner />
+            <span>Generating schedule in the background — this takes up to 30 s.</span>
+            <button className={styles.generatingDismiss} onClick={() => setPendingJobId(null)}>Dismiss</button>
+        </div>
+    );
+
     // ── History view (default landing) ────────────────────────────────────────
     if (!currentSchedule && !draftSchedule) {
         return (
             <>
+                {generatingBanner}
                 <ScheduleHistoryTable
                     schedules={schedules}
                     onView={openSchedule}
@@ -257,7 +312,7 @@ export default function Schedule() {
                 <GenerateScheduleModal
                     isOpen={isGenerateOpen}
                     onClose={() => setIsGenerateOpen(false)}
-                    onSuccess={handleGenerated}
+                    onJobStarted={handleJobStarted}
                 />
             </>
         );
@@ -415,7 +470,7 @@ export default function Schedule() {
             <GenerateScheduleModal
                 isOpen={isGenerateOpen}
                 onClose={() => setIsGenerateOpen(false)}
-                onSuccess={handleGenerated}
+                onJobStarted={handleJobStarted}
             />
         </div>
     );
