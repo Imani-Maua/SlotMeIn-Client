@@ -6,11 +6,70 @@
     background: $color-bg;
 }
 
-.main {
+.rightPane {
     flex: 1;
     margin-left: 240px;
     min-height: 100vh;
-    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1;
     padding: $space-8;
     box-sizing: border-box;
+    overflow-y: auto;
+}
+
+// ─── Global banners ───────────────────────────────────────────────────────────
+.banner {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-2 $space-6;
+    font-size: $font-size-sm;
+    font-weight: 500;
+    border-bottom: 1px solid rgba($color-navy, 0.12);
+    background: $color-navy-subtle;
+    color: $color-navy;
+
+    span { flex: 1; }
+}
+
+.bannerSuccess {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.25);
+    color: #065f46;
+}
+
+.bannerError {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.25);
+    color: #9b2c2c;
+}
+
+.bannerAction {
+    background: none;
+    border: 1.5px solid currentColor;
+    border-radius: $radius-sm;
+    color: inherit;
+    font-size: $font-size-xs;
+    font-weight: 700;
+    padding: 2px $space-3;
+    cursor: pointer;
+    font-family: $font-sans;
+    &:hover { opacity: 0.7; }
+}
+
+.bannerClose {
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: inherit;
+    opacity: 0.45;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    font-family: $font-sans;
+    &:hover { opacity: 1; }
 }
