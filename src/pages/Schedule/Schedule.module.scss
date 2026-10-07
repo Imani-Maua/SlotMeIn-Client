@@ -327,6 +327,20 @@
     }
 }
 
+// ─── Generating banner ────────────────────────────────────────────────────────
+.generatingBanner {
+    display: flex; align-items: center; gap: $space-3;
+    padding: $space-3 $space-5; margin-bottom: $space-5;
+    background: $color-navy-subtle; border: 1px solid rgba($color-navy, 0.2);
+    border-radius: $radius-lg; font-size: $font-size-sm; color: $color-navy;
+    span { flex: 1; font-weight: 500; }
+}
+.generatingDismiss {
+    background: none; border: none; font-size: $font-size-xs; color: $color-text-muted;
+    cursor: pointer; font-weight: 600; padding: 0;
+    &:hover { color: $color-navy; }
+}
+
 // ─── History Table ─────────────────────────────────────────────────────────────
 .tableWrapper {
     background: white;
