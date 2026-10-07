@@ -1,4 +1,4 @@
-import { useState, useMemo, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import { createAssignment, deleteAssignment } from '../../api/scheduleService';
 import { useToast } from '../../components/Toast/Toast';
 import SlotAssignModal from './SlotAssignModal';
@@ -9,34 +9,21 @@ let _tempIdCounter = 0;
 const nextTempId = () => `temp-${++_tempIdCounter}`;
 
 const SHIFT_PERIODS = [
-    { id: 'am', label: 'Morning (AM)', start: '06:00', end: '16:00' },
-    { id: 'lounge', label: 'Lounge', start: '11:00', end: '23:59' },
-    { id: 'pm', label: 'Evening (PM)', start: '15:00', end: '23:59' },
+    { id: 'am',     label: 'Morning (AM)',  start: '06:00', end: '16:00' },
+    { id: 'lounge', label: 'Lounge',        start: '11:00', end: '23:59' },
+    { id: 'pm',     label: 'Evening (PM)',  start: '15:00', end: '23:59' },
 ];
-
-const ROLE_PALETTE = [
-    '#1b2a5e', '#7c3aed', '#0891b2', '#059669', '#b45309',
-    '#be185d', '#dc2626', '#9f1239', '#064e3b', '#713f12',
-];
-
-function buildRoleColorMap(talents) {
-    const roles = [...new Set(talents.map(talent => talent.tal_role).filter(Boolean))].sort();
-    const map = {};
-    roles.forEach((role, i) => { map[role] = ROLE_PALETTE[i % ROLE_PALETTE.length]; });
-    return map;
-}
 
 function getWeekDays(weekStart) {
     if (!weekStart) return [];
-    // Parse YYYY-MM-DD directly to avoid UTC midnight timezone issues
     const [year, month, day] = weekStart.split('-').map(Number);
     const days = [];
     for (let i = 0; i < 7; i++) {
-        const d= new Date(year, month - 1, day + i);
+        const d = new Date(year, month - 1, day + i);
         days.push({
             iso: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`,
             label: d.toLocaleDateString('en-GB', { weekday: 'short' }),
-            date: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
+            date:  d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }),
         });
     }
     return days;
@@ -44,23 +31,74 @@ function getWeekDays(weekStart) {
 
 export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdateDraft, onRefresh }) {
     const toast = useToast();
-    const [slotModal, setSlotModal] = useState(null);
+    const [slotModal,       setSlotModal]       = useState(null);
     const [localAssignments, setLocalAssignments] = useState(schedule?.assignments || []);
+    const [expandedGroups,  setExpandedGroups]  = useState({});
+    const [focusedTalentId, setFocusedTalentId] = useState(null);
 
     const weekDays = useMemo(() => getWeekDays(schedule?.week_start), [schedule?.week_start]);
-    const roleColors = useMemo(() => buildRoleColorMap(talents), [talents]);
-    const uniqueRoles = useMemo(() => Object.keys(roleColors), [roleColors]);
 
+    // staffingLookup: `${date}|${shift_name}|${role}` → {required, assigned}
+    // shift_id format from backend: "template_id__date__period_id__role"
+    const staffingLookup = useMemo(() => {
+        const lookup = {};
+        (schedule.understaffed || []).forEach(u => {
+            const parts = (u.shift_id || '').split('__');
+            if (parts.length < 4) return;
+            const date = parts[1];
+            lookup[`${date}|${u.shift_name}|${u.role}`] = {
+                required: u.required,
+                assigned: u.assigned,
+            };
+        });
+        return lookup;
+    }, [schedule.understaffed]);
+
+    // cellMap: `${date}|${shift_id}` → assignment[]
     const cellMap = useMemo(() => {
         const map = {};
         localAssignments.forEach(a => {
-            const sn = (a.shift_name || '').toLowerCase();
-            const key = `${a.date_of}|${sn}`;
+            const key = `${a.date_of}|${(a.shift_name || '').toLowerCase()}`;
             if (!map[key]) map[key] = [];
             map[key].push(a);
         });
         return map;
     }, [localAssignments]);
+
+    // rolesPerCell: `${date}|${shift_id}` → Set<role>
+    // Merges roles from actual assignments and from understaffed (so 0-assigned roles still show)
+    const rolesPerCell = useMemo(() => {
+        const map = {};
+        localAssignments.forEach(a => {
+            const role = resolveRole(a);
+            if (!role) return;
+            const key = `${a.date_of}|${(a.shift_name || '').toLowerCase()}`;
+            if (!map[key]) map[key] = new Set();
+            map[key].add(role);
+        });
+        (schedule.understaffed || []).forEach(u => {
+            const parts = (u.shift_id || '').split('__');
+            if (parts.length < 4) return;
+            const key = `${parts[1]}|${u.shift_name}`;
+            if (!map[key]) map[key] = new Set();
+            map[key].add(u.role);
+        });
+        return map;
+    }, [localAssignments, schedule.understaffed]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    function resolveRole(a) {
+        if (a.tal_role) return a.tal_role;
+        return talents.find(t => t.id === a.talent_id)?.tal_role || null;
+    }
+
+    function getLastName(a) {
+        const t = talents.find(t => t.id === a.talent_id);
+        return t ? t.lastname : `#${a.talent_id}`;
+    }
+
+    function toggleGroup(key) {
+        setExpandedGroups(prev => ({ ...prev, [key]: !prev[key] }));
+    }
 
     function openSlotModal(shiftId, dateOf) {
         const key = `${dateOf}|${shiftId}`;
@@ -77,18 +115,18 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
             try {
                 const endTime = assignment.end_time === '23:59' ? '23:59:00' : assignment.end_time + ':00';
                 const created = await createAssignment({
-                    talent_id: assignment.talent_id,
-                    date_of: assignment.date_of,
-                    start_time: assignment.start_time + ':00',
-                    end_time: endTime,
-                    shift_name: assignment.shift_name,
+                    talent_id:   assignment.talent_id,
+                    date_of:     assignment.date_of,
+                    start_time:  assignment.start_time + ':00',
+                    end_time:    endTime,
+                    shift_name:  assignment.shift_name,
                     schedule_id: schedule.id,
                 });
                 toast({ message: 'Assignment added.', type: 'success' });
                 const next = [...localAssignments, {
                     ...created,
                     talent_name: assignment.talent_name,
-                    tal_role: assignment.tal_role,
+                    tal_role:    assignment.tal_role,
                 }];
                 setLocalAssignments(next);
                 onRefresh?.();
@@ -99,7 +137,7 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
     }
 
     async function handleRemove(assignment) {
-        if (!window.confirm(`Remove ${assignment.talent_name || 'this person'} from this slot?`)) return;
+        if (!window.confirm(`Remove ${getLastName(assignment)} from this slot?`)) return;
         if (isDraft || String(assignment.id).startsWith('temp-')) {
             const next = localAssignments.filter(a => a.id !== assignment.id);
             setLocalAssignments(next);
@@ -108,8 +146,7 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
             try {
                 await deleteAssignment(assignment.id);
                 toast({ message: 'Removed.', type: 'success' });
-                const next = localAssignments.filter(a => a.id !== assignment.id);
-                setLocalAssignments(next);
+                setLocalAssignments(prev => prev.filter(a => a.id !== assignment.id));
                 onRefresh?.();
             } catch (e) {
                 toast({ message: formatError(e), type: 'error' });
@@ -117,29 +154,17 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
         }
     }
 
-    function resolveName(a) {
-        if (a.talent_name) return a.talent_name;
-        const t = talents.find(t => t.id === a.talent_id);
-        return t ? `${t.firstname} ${t.lastname}` : `#${a.talent_id}`;
-    }
-
-    function resolveRole(a) {
-        if (a.tal_role) return a.tal_role;
-        return talents.find(t => t.id === a.talent_id)?.tal_role || null;
-    }
+    const focusedTalent = useMemo(
+        () => talents.find(t => t.id === focusedTalentId) || null,
+        [focusedTalentId, talents]
+    );
+    const focusedAssignments = useMemo(
+        () => localAssignments.filter(a => a.talent_id === focusedTalentId),
+        [focusedTalentId, localAssignments]
+    );
 
     return (
         <div className={styles.wrapper}>
-            <div className={styles.legend}>
-                <span className={styles.legendLabel}>Roles:</span>
-                {uniqueRoles.map(r => (
-                    <div key={r} className={styles.legendItem}>
-                        <span className={styles.dot} style={{ background: roleColors[r] }} />
-                        <span>{r}</span>
-                    </div>
-                ))}
-            </div>
-
             <div className={styles.tableScroll}>
                 <table className={styles.table}>
                     <thead>
@@ -160,29 +185,81 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
                                     <div className={styles.shiftName}>{shift.label}</div>
                                     <div className={styles.shiftTimes}>{shift.start}–{shift.end}</div>
                                 </td>
+
                                 {weekDays.map(day => {
-                                    const key = `${day.iso}|${shift.id}`;
-                                    const cells = cellMap[key] || [];
+                                    const cellKey   = `${day.iso}|${shift.id}`;
+                                    const cellAssignments = cellMap[cellKey] || [];
+                                    const cellRoles = Array.from(rolesPerCell[cellKey] || new Set()).sort();
+
                                     return (
                                         <td key={day.iso} className={styles.cell}>
                                             <div className={styles.cellContent}>
-                                                {cells.map(a => {
-                                                    const role = resolveRole(a);
-                                                    const color = roleColors[role] || '#6b7280';
+
+                                                {cellRoles.map(role => {
+                                                    const groupKey  = `${cellKey}|${role}`;
+                                                    const isOpen    = expandedGroups[groupKey] ?? false;
+                                                    const roleRows  = cellAssignments.filter(a => resolveRole(a) === role);
+                                                    const staffing  = staffingLookup[`${day.iso}|${shift.id}|${role}`];
+                                                    const required  = staffing ? staffing.required : roleRows.length;
+                                                    const actual    = roleRows.length;
+                                                    const under     = actual < required;
+
                                                     return (
-                                                        <div key={a.id} className={styles.assignedRow}>
-                                                            <span className={styles.roleDot} style={{ background: color }} />
-                                                            <span className={styles.assignName}>{resolveName(a)}</span>
-                                                            <button className={styles.removeBtn} onClick={() => handleRemove(a)}>×</button>
+                                                        <div key={role} className={styles.roleGroup}>
+                                                            <button
+                                                                className={`${styles.roleHeader} ${under ? styles.roleHeaderUnder : ''}`}
+                                                                onClick={() => toggleGroup(groupKey)}
+                                                            >
+                                                                <span className={styles.roleChevron}>{isOpen ? '▾' : '▸'}</span>
+                                                                <span className={styles.roleName}>{role}</span>
+                                                                <span className={`${styles.roleCount} ${under ? styles.roleCountUnder : ''}`}>
+                                                                    {actual}/{required}
+                                                                </span>
+                                                            </button>
+
+                                                            {isOpen && (
+                                                                <div className={styles.roleNames}>
+                                                                    {roleRows.map(a => (
+                                                                        <div
+                                                                            key={a.id}
+                                                                            className={`${styles.nameRow} ${focusedTalentId === a.talent_id ? styles.nameFocused : ''}`}
+                                                                        >
+                                                                            <span
+                                                                                className={styles.lastName}
+                                                                                onClick={() => setFocusedTalentId(
+                                                                                    focusedTalentId === a.talent_id ? null : a.talent_id
+                                                                                )}
+                                                                            >
+                                                                                {getLastName(a)}
+                                                                            </span>
+                                                                            <button
+                                                                                className={styles.removeBtn}
+                                                                                onClick={() => handleRemove(a)}
+                                                                            >×</button>
+                                                                        </div>
+                                                                    ))}
+                                                                    <button
+                                                                        className={styles.addBtn}
+                                                                        onClick={() => openSlotModal(shift.id, day.iso)}
+                                                                    >+ Add</button>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                     );
                                                 })}
-                                                <button className={styles.addBtn} onClick={() => openSlotModal(shift.id, day.iso)}>
-                                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                                        <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-                                                    </svg>
-                                                    Add
-                                                </button>
+
+                                                {cellRoles.length === 0 && (
+                                                    <button
+                                                        className={styles.addBtn}
+                                                        onClick={() => openSlotModal(shift.id, day.iso)}
+                                                    >
+                                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                                                            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                                                        </svg>
+                                                        Add
+                                                    </button>
+                                                )}
+
                                             </div>
                                         </td>
                                     );
@@ -192,6 +269,46 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
                     </tbody>
                 </table>
             </div>
+
+            {/* ── Talent week panel ───────────────────────────────────────── */}
+            {focusedTalent && (
+                <div className={styles.talentPanel}>
+                    <div className={styles.talentPanelHeader}>
+                        <div>
+                            <div className={styles.talentPanelName}>
+                                {focusedTalent.firstname} {focusedTalent.lastname}
+                            </div>
+                            <div className={styles.talentPanelRole}>{focusedTalent.tal_role}</div>
+                        </div>
+                        <button className={styles.talentPanelClose} onClick={() => setFocusedTalentId(null)}>×</button>
+                    </div>
+                    <div className={styles.talentPanelBody}>
+                        {focusedAssignments.length === 0 ? (
+                            <p className={styles.talentPanelEmpty}>Not scheduled this week.</p>
+                        ) : (
+                            <div className={styles.talentShifts}>
+                                {focusedAssignments.map((a, i) => {
+                                    const sn = (a.shift_name || '').toLowerCase();
+                                    const [yr, mo, dy] = a.date_of.split('-').map(Number);
+                                    const dayLabel = new Date(yr, mo - 1, dy)
+                                        .toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'short' });
+                                    return (
+                                        <div key={i} className={styles.talentShift}>
+                                            <span className={styles.talentShiftDay}>{dayLabel}</span>
+                                            <span className={`${styles.talentShiftPeriod} ${styles[sn] || ''}`}>
+                                                {sn.toUpperCase()}
+                                            </span>
+                                            <span className={styles.talentShiftTime}>
+                                                {(a.start_time || '').substring(0, 5)}–{(a.end_time || '').substring(0, 5)}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {slotModal && (
                 <SlotAssignModal
