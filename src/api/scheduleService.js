@@ -33,6 +33,11 @@ export const getSchedule = async (scheduleId) => {
     return response.data;
 };
 
+export const getJobResult = async (jobId) => {
+    const response = await axiosInstance.get(`/schedule/jobs/${jobId}`);
+    return response.data;
+};
+
 //Manual Assignments (Overrides) 
 
 export const createAssignment = async (data) => {
