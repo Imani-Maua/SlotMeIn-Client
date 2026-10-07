@@ -149,21 +149,21 @@ export default function Schedule() {
 
     useEffect(() => { fetchSchedules(); }, [fetchSchedules]);
 
-    // On navigation from the global banner "View draft" link
+    // Open draft when navigated here from the banner — watches location.state so it fires
+    // even when already on this page (navigate() with new state updates location without unmounting)
     useEffect(() => {
         const id = location.state?.openScheduleId;
         if (!id) return;
-        invalidatePrefixed('schedules:');
-        fetchSchedules();
+        invalidatePrefixed('schedules:');  // bust list so history view refreshes on next visit
         openSchedule(id);
         window.history.replaceState({}, document.title, location.pathname);
-    }, []); // eslint-disable-line
+    }, [location.state]); // eslint-disable-line
 
-    // When job finishes and user is already on this page, open the new draft immediately
+    // When job finishes and user is already on this page, open the draft immediately.
+    // Do NOT call fetchSchedules() here — it sets loading=true which blanks the detail view.
     useEffect(() => {
         if (notification?.type !== 'done' || !notification?.scheduleId) return;
         invalidatePrefixed('schedules:');
-        fetchSchedules();
         openSchedule(notification.scheduleId);
         setNotification(null);
     }, [notification]); // eslint-disable-line
