@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useJob } from '../../context/JobContext';
 import styles from './Sidebar.module.scss';
 
 const NAV_ITEMS = [
@@ -74,7 +75,9 @@ const ADMIN_ITEM = {
 export default function Sidebar() {
     const { logout, role } = useAuth();
     const navigate = useNavigate();
+    const { pendingJobId, notification } = useJob();
 
+    const hasScheduleActivity = !!pendingJobId || notification?.type === 'done';
     const isAdmin = role === 'superuser';
 
     function handleLogout() {
@@ -84,7 +87,6 @@ export default function Sidebar() {
 
     return (
         <aside className={styles.sidebar}>
-            {/* Logo */}
             <div className={styles.logo}>
                 <div className={styles.logoIcon}>
                     <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -94,7 +96,6 @@ export default function Sidebar() {
                 <span className={styles.logoText}>SlotMeIn</span>
             </div>
 
-            {/* Nav */}
             <nav className={styles.nav}>
                 <ul className={styles.navList}>
                     {NAV_ITEMS.map(({ to, label, icon }) => (
@@ -107,6 +108,9 @@ export default function Sidebar() {
                             >
                                 <span className={styles.navIcon}>{icon}</span>
                                 <span className={styles.navLabel}>{label}</span>
+                                {to === '/schedule' && hasScheduleActivity && (
+                                    <span className={styles.navDot} />
+                                )}
                             </NavLink>
                         </li>
                     ))}
@@ -128,7 +132,6 @@ export default function Sidebar() {
                 </ul>
             </nav>
 
-            {/* Logout */}
             <button className={styles.logoutBtn} onClick={handleLogout}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
