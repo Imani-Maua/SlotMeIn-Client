@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { generateSchedule } from '../../api/scheduleService';
+import { generateSchedule, getJobResult } from '../../api/scheduleService';
 import { useToast } from '../../components/Toast/Toast';
 import Modal from '../../components/Modal/Modal';
 import { formatError } from '../../utils/errorUtils';
 import styles from './PeriodModal.module.scss'; // Reusing standard modal styles
+
+const POLL_INTERVAL_MS = 2000;
+const POLL_TIMEOUT_MS = 90000;
 
 export default function GenerateScheduleModal({ isOpen, onClose, onSuccess }) {
     const toast = useToast();
@@ -17,13 +20,34 @@ export default function GenerateScheduleModal({ isOpen, onClose, onSuccess }) {
         return d.toISOString().split('T')[0];
     };
 
+    const pollForResult = (jobId) => new Promise((resolve, reject) => {
+        const deadline = Date.now() + POLL_TIMEOUT_MS;
+
+        const check = async () => {
+            if (Date.now() > deadline) {
+                return reject(new Error('Schedule generation timed out. Please try again.'));
+            }
+            try {
+                const data = await getJobResult(jobId);
+                if (data.status === 'done') return resolve(data.result);
+                if (data.status === 'failed') return reject(new Error(data.error || 'Solver failed.'));
+                setTimeout(check, POLL_INTERVAL_MS);
+            } catch (err) {
+                reject(err);
+            }
+        };
+
+        setTimeout(check, POLL_INTERVAL_MS);
+    });
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!startDate) return;
 
         setIsGenerating(true);
         try {
-            const result = await generateSchedule(startDate);
+            const { job_id } = await generateSchedule(startDate);
+            const result = await pollForResult(job_id);
             toast({ message: 'Schedule generated successfully!', type: 'success' });
             onSuccess(result);
         } catch (error) {
