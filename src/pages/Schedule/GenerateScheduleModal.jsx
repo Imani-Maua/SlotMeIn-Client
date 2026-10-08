@@ -63,7 +63,7 @@ export default function GenerateScheduleModal({ isOpen, onClose, onJobStarted })
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                         required
-                        min={getNextMonday()}
+                        {/* min={getNextMonday()} — removed for thesis demo */}
                     />
                 </div>
             </form>
