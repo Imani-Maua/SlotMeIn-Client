@@ -11,6 +11,7 @@ import ShiftConfig from './pages/ShiftConfig/ShiftConfig';
 import Schedule from './pages/Schedule/Schedule';
 import Users from './pages/Users/Users';
 import Constraints from './pages/Constraints/Constraints';
+import StaffingConfig from './pages/StaffingConfig/StaffingConfig';
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated } = useAuth();
@@ -41,6 +42,7 @@ function AppRoutes() {
                 <Route path="/shifts" element={<ShiftConfig />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/constraints" element={<Constraints />} />
+                <Route path="/staffing" element={<StaffingConfig />} />
                 <Route path="/admin/users" element={<SuperuserRoute><Users /></SuperuserRoute>} />
             </Route>
 
