@@ -35,7 +35,9 @@ export default function AppLayout() {
                         <span>
                             {notification.type === 'timeout'
                                 ? 'Schedule generation timed out. Try again.'
-                                : notification.error || 'Schedule generation failed.'}
+                                : notification.type === 'failed' && notification.error
+                                    ? notification.error
+                                    : 'Schedule generation failed. Please try again.'}
                         </span>
                         <button className={styles.bannerClose} onClick={() => setNotification(null)}>×</button>
                     </div>
