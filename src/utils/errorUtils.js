@@ -1,21 +1,33 @@
-/**
- * Formats backend error messages.
- * Handles FastAPI's 422 detail (array of objects) and standard 400/404/500 strings.
- */
+const STATUS_MESSAGES = {
+    400: 'Bad request.',
+    401: 'You are not authorised to do that.',
+    403: 'Access denied.',
+    404: 'Not found.',
+    409: 'Conflict — this record may already exist.',
+    422: 'Invalid input.',
+    500: 'Something went wrong on the server. Please try again.',
+    502: 'Server is unreachable. Please try again.',
+    503: 'Service unavailable. Please try again.',
+};
+
 export const formatError = (error) => {
-    const detail = error.response?.data?.detail;
-
-    if (!detail) return 'An unexpected error occurred.';
-
-    if (Array.isArray(detail)) {
-        // FastAPI 422 validation error
-        // Join the messages from each error object
-        return detail.map(err => err.msg).join(', ');
+    if (!error.response) {
+        return 'Network error — check your connection and try again.';
     }
 
-    if (typeof detail === 'object') {
-        return JSON.stringify(detail);
+    const { status, data } = error.response;
+    const detail = data?.detail;
+
+    if (detail) {
+        if (Array.isArray(detail)) {
+            // FastAPI 422 validation errors
+            return detail.map(err => err.msg).join(', ');
+        }
+        if (typeof detail === 'string' && status < 500) {
+            // Only surface backend strings for 4xx — never expose raw 500 messages
+            return detail;
+        }
     }
 
-    return detail;
+    return STATUS_MESSAGES[status] ?? 'An unexpected error occurred.';
 };
