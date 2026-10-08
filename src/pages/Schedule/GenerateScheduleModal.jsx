@@ -8,6 +8,7 @@ import styles from './PeriodModal.module.scss';
 export default function GenerateScheduleModal({ isOpen, onClose, onJobStarted }) {
     const toast = useToast();
     const [startDate,    setStartDate]    = useState('');
+    const [occupancyPct, setOccupancyPct] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const getNextMonday = () => {
@@ -21,7 +22,8 @@ export default function GenerateScheduleModal({ isOpen, onClose, onJobStarted })
         if (!startDate) return;
         setIsSubmitting(true);
         try {
-            const { job_id } = await generateSchedule(startDate);
+            const occ = occupancyPct !== '' ? parseFloat(occupancyPct) / 100 : null;
+            const { job_id } = await generateSchedule(startDate, occ);
             onJobStarted(job_id);
             onClose();
         } catch (error) {
@@ -63,6 +65,18 @@ export default function GenerateScheduleModal({ isOpen, onClose, onJobStarted })
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                         required
+                    />
+                </div>
+                <div className={styles.formGroup}>
+                    <label>Expected Occupancy % <span style={{ fontWeight: 400, opacity: 0.6 }}>(optional — enables ML staffing predictions)</span></label>
+                    <input
+                        type="number"
+                        min="0"
+                        max="100"
+                        step="1"
+                        placeholder="e.g. 85"
+                        value={occupancyPct}
+                        onChange={(e) => setOccupancyPct(e.target.value)}
                     />
                 </div>
             </form>
