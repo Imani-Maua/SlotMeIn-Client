@@ -154,6 +154,32 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
         }
     }
 
+    // Derive a demand tier badge per day from total required headcount across all shifts
+    const tierByDay = useMemo(() => {
+        const totals = {};
+        weekDays.forEach(day => {
+            let total = 0;
+            SHIFT_PERIODS.forEach(shift => {
+                Array.from(rolesPerCell[`${day.iso}|${shift.id}`] || new Set()).forEach(role => {
+                    const s = staffingLookup[`${day.iso}|${shift.id}|${role}`];
+                    if (s) total += s.required;
+                });
+            });
+            totals[day.iso] = total;
+        });
+        const vals = Object.values(totals).filter(v => v > 0).sort((a, b) => a - b);
+        if (vals.length === 0) return {};
+        const lo = vals[Math.floor(vals.length / 3)];
+        const hi = vals[Math.floor((2 * vals.length) / 3)];
+        return Object.fromEntries(
+            weekDays.map(day => {
+                const t = totals[day.iso];
+                const tier = t === 0 ? null : t <= lo ? 'Low' : t <= hi ? 'Med' : 'High';
+                return [day.iso, tier];
+            })
+        );
+    }, [weekDays, rolesPerCell, staffingLookup]);
+
     const focusedTalent = useMemo(
         () => talents.find(t => t.id === focusedTalentId) || null,
         [focusedTalentId, talents]
@@ -174,6 +200,11 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
                                 <th key={d.iso} className={styles.dayHeader}>
                                     <span className={styles.dayName}>{d.label}</span>
                                     <span className={styles.dayDate}>{d.date}</span>
+                                    {tierByDay[d.iso] && (
+                                        <span className={`${styles.tierBadge} ${styles[`tier${tierByDay[d.iso]}`]}`}>
+                                            {tierByDay[d.iso]}
+                                        </span>
+                                    )}
                                 </th>
                             ))}
                         </tr>
