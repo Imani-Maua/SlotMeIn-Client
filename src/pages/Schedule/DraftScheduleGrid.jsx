@@ -210,6 +210,7 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
                                                     const isOpen    = expandedGroups[groupKey] ?? false;
                                                     const roleRows  = cellAssignments.filter(a => resolveRole(a) === role);
                                                     const staffing  = staffingLookup[`${day.iso}|${shift.id}|${role}`];
+
                                                     const required  = staffing ? staffing.required : roleRows.length;
                                                     const actual    = roleRows.length;
                                                     const under     = actual < required;
