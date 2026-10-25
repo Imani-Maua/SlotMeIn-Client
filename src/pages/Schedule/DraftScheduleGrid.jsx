@@ -39,10 +39,11 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
     const weekDays = useMemo(() => getWeekDays(schedule?.week_start), [schedule?.week_start]);
 
     // staffingLookup: `${date}|${shift_name}|${role}` → {required, assigned}
-    // shift_id format from backend: "template_id__date__period_id__role"
+    // Prefers staffing_requirements (all slots) over understaffed (shortfalls only).
     const staffingLookup = useMemo(() => {
         const lookup = {};
-        (schedule.understaffed || []).forEach(u => {
+        const source = (schedule.staffing_requirements?.length ? schedule.staffing_requirements : schedule.understaffed) || [];
+        source.forEach(u => {
             const parts = (u.shift_id || '').split('__');
             if (parts.length < 4) return;
             const date = parts[1];
@@ -52,7 +53,7 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
             };
         });
         return lookup;
-    }, [schedule.understaffed]);
+    }, [schedule.staffing_requirements, schedule.understaffed]);
 
     // cellMap: `${date}|${shift_id}` → assignment[]
     const cellMap = useMemo(() => {
@@ -154,25 +155,14 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
         }
     }
 
-    // Derive a demand tier badge per day from total assignment count.
-    // Using assignments (not understaffed) because understaffed only contains partially-filled slots.
-    const tierByDay = useMemo(() => {
-        const totals = {};
-        weekDays.forEach(day => {
-            totals[day.iso] = localAssignments.filter(a => a.date_of === day.iso).length;
-        });
-        const vals = Object.values(totals).filter(v => v > 0).sort((a, b) => a - b);
-        if (vals.length === 0) return {};
-        const lo = vals[Math.floor(vals.length / 3)];
-        const hi = vals[Math.floor((2 * vals.length) / 3)];
-        return Object.fromEntries(
-            weekDays.map(day => {
-                const t = totals[day.iso];
-                const tier = t === 0 ? null : t <= lo ? 'Low' : t <= hi ? 'Med' : 'High';
-                return [day.iso, tier];
-            })
-        );
-    }, [weekDays, localAssignments]);
+    // Color role header rows by required headcount using absolute thresholds.
+    // 1–2 = blue (quiet), 3–4 = amber (moderate), 5+ = red (busy).
+    function requirementColor(required) {
+        if (!required || required <= 0) return undefined;
+        if (required <= 2) return 'rgba(59,130,246,0.13)';
+        if (required <= 4) return 'rgba(245,158,11,0.18)';
+        return 'rgba(239,68,68,0.18)';
+    }
 
     const focusedTalent = useMemo(
         () => talents.find(t => t.id === focusedTalentId) || null,
@@ -194,11 +184,6 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
                                 <th key={d.iso} className={styles.dayHeader}>
                                     <span className={styles.dayName}>{d.label}</span>
                                     <span className={styles.dayDate}>{d.date}</span>
-                                    {tierByDay[d.iso] && (
-                                        <span className={`${styles.tierBadge} ${styles[`tier${tierByDay[d.iso]}`]}`}>
-                                            {tierByDay[d.iso]}
-                                        </span>
-                                    )}
                                 </th>
                             ))}
                         </tr>
@@ -233,6 +218,7 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
                                                         <div key={role} className={styles.roleGroup}>
                                                             <button
                                                                 className={`${styles.roleHeader} ${under ? styles.roleHeaderUnder : ''}`}
+                                                                style={{ background: under ? undefined : requirementColor(staffing?.required) }}
                                                                 onClick={() => toggleGroup(groupKey)}
                                                             >
                                                                 <span className={styles.roleChevron}>{isOpen ? '▾' : '▸'}</span>

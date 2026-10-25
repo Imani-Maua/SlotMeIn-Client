@@ -33,20 +33,6 @@
 .dayName { display: block; font-size: $font-size-sm; font-weight: 700; color: white; letter-spacing: 0.04em; }
 .dayDate { display: block; font-size: $font-size-xs; color: rgba(255,255,255,0.6); margin-top: 2px; }
 
-.tierBadge {
-    display: inline-block;
-    margin-top: 5px;
-    padding: 2px 7px;
-    border-radius: 20px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-}
-.tierLow  { background: rgba(255,255,255,0.18); color: #fff; }
-.tierMed  { background: rgba(251,191,36,0.90);  color: #78350f; }
-.tierHigh { background: rgba(239,68,68,0.90);   color: #fff; }
-
 .shiftLabel { background: $color-bg-surface; padding: $space-3 $space-4; vertical-align: middle; }
 .shiftName { font-size: $font-size-sm; font-weight: $font-weight-semibold; color: $color-text-primary; }
 .shiftTimes { font-size: $font-size-xs; color: $color-text-muted; margin-top: 2px; }
