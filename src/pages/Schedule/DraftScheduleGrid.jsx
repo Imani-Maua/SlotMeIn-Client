@@ -154,18 +154,12 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
         }
     }
 
-    // Derive a demand tier badge per day from total required headcount across all shifts
+    // Derive a demand tier badge per day from total assignment count.
+    // Using assignments (not understaffed) because understaffed only contains partially-filled slots.
     const tierByDay = useMemo(() => {
         const totals = {};
         weekDays.forEach(day => {
-            let total = 0;
-            SHIFT_PERIODS.forEach(shift => {
-                Array.from(rolesPerCell[`${day.iso}|${shift.id}`] || new Set()).forEach(role => {
-                    const s = staffingLookup[`${day.iso}|${shift.id}|${role}`];
-                    if (s) total += s.required;
-                });
-            });
-            totals[day.iso] = total;
+            totals[day.iso] = localAssignments.filter(a => a.date_of === day.iso).length;
         });
         const vals = Object.values(totals).filter(v => v > 0).sort((a, b) => a - b);
         if (vals.length === 0) return {};
@@ -178,7 +172,7 @@ export default function DraftScheduleGrid({ schedule, isDraft, talents, onUpdate
                 return [day.iso, tier];
             })
         );
-    }, [weekDays, rolesPerCell, staffingLookup]);
+    }, [weekDays, localAssignments]);
 
     const focusedTalent = useMemo(
         () => talents.find(t => t.id === focusedTalentId) || null,
