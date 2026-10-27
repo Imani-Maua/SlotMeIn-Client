@@ -113,20 +113,24 @@ export default function AddConstraintModal({ talent, existingConstraintTypes, is
                         <div className={styles.typeCards}>
                             {CONSTRAINT_TYPES.map(type => {
                                 const alreadyExists = existingConstraintTypes?.includes(type.value);
+                                const fullTimeBlocked = talent?.contract_type === 'full-time' &&
+                                    (type.value === 'availability' || type.value === 'combination');
+                                const isDisabled = alreadyExists || fullTimeBlocked;
                                 return (
                                     <button
                                         key={type.value}
-                                        className={`${styles.typeCard} ${selectedType === type.value ? styles.selected : ''} ${alreadyExists ? styles.disabled : ''}`}
-                                        onClick={() => !alreadyExists && setSelectedType(type.value)}
-                                        disabled={alreadyExists}
-                                        title={alreadyExists ? 'This constraint type already exists' : ''}
+                                        className={`${styles.typeCard} ${selectedType === type.value ? styles.selected : ''} ${isDisabled ? styles.disabled : ''}`}
+                                        onClick={() => !isDisabled && setSelectedType(type.value)}
+                                        disabled={isDisabled}
+                                        title={fullTimeBlocked ? 'Not available for full-time staff' : alreadyExists ? 'This constraint type already exists' : ''}
                                     >
                                         <div className={styles.typeIcon}>{type.icon}</div>
                                         <div className={styles.typeText}>
                                             <span className={styles.typeLabel}>{type.label}</span>
                                             <span className={styles.typeDesc}>{type.description}</span>
                                         </div>
-                                        {alreadyExists && <span className={styles.existsBadge}>Set</span>}
+                                        {fullTimeBlocked && <span className={styles.fullTimeBadge}>Full-time</span>}
+                                        {!fullTimeBlocked && alreadyExists && <span className={styles.existsBadge}>Set</span>}
                                     </button>
                                 );
                             })}

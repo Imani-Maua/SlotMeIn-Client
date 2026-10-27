@@ -68,3 +68,73 @@
     svg { width: 11px; height: 11px; }
     &:hover { border-color: $color-navy; color: $color-navy; background: $color-navy-subtle; }
 }
+
+// ── Role groups ────────────────────────────────────────────────────────────────
+.roleGroup { margin-bottom: 3px; &:last-of-type { margin-bottom: 0; } }
+
+.roleHeader {
+    display: flex; align-items: center; gap: 4px;
+    width: 100%; padding: 3px 4px; border-radius: $radius-sm;
+    border: none; background: $color-bg-surface; cursor: pointer; font-family: inherit;
+    transition: background $transition-fast;
+    &:hover { background: rgba($color-navy, 0.07); }
+}
+.roleHeaderUnder {
+    background: rgba(#f59e0b, 0.1);
+    &:hover { background: rgba(#f59e0b, 0.18); }
+}
+.roleChevron { font-size: 9px; color: $color-text-muted; flex-shrink: 0; line-height: 1; }
+.roleName {
+    flex: 1; font-size: $font-size-xs; font-weight: $font-weight-semibold;
+    color: $color-text-secondary; text-transform: capitalize; text-align: left;
+}
+.roleCount { font-size: $font-size-xs; font-weight: 700; color: $color-text-muted; flex-shrink: 0; }
+.roleCountUnder { color: #d97706; }
+
+.roleNames { padding: 2px 0 4px 12px; display: flex; flex-direction: column; gap: 2px; }
+
+.nameRow {
+    display: flex; align-items: center; gap: $space-1;
+    padding: 2px 4px; border-radius: $radius-sm; transition: background $transition-fast;
+    &:hover { background: rgba($color-navy, 0.04); }
+}
+.nameFocused { background: rgba($color-navy, 0.1) !important; }
+.lastName {
+    flex: 1; font-size: $font-size-xs; color: $color-text-primary;
+    font-weight: $font-weight-medium; cursor: pointer;
+    &:hover { color: $color-navy; text-decoration: underline; }
+}
+
+// ── Talent week panel ──────────────────────────────────────────────────────────
+.talentPanel {
+    border: 1px solid $color-border; border-radius: $radius-lg;
+    background: white; box-shadow: $shadow-sm; overflow: hidden;
+}
+.talentPanelHeader {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: $space-3 $space-5; background: $color-navy;
+}
+.talentPanelName { font-weight: $font-weight-semibold; font-size: $font-size-sm; color: white; }
+.talentPanelRole { font-size: $font-size-xs; color: rgba(255,255,255,0.65); margin-top: 2px; }
+.talentPanelClose {
+    background: none; border: none; color: rgba(255,255,255,0.7);
+    font-size: 20px; cursor: pointer; line-height: 1; padding: 0;
+    &:hover { color: white; }
+}
+.talentPanelBody { padding: $space-4 $space-5; }
+.talentPanelEmpty { color: $color-text-muted; font-size: $font-size-sm; margin: 0; }
+.talentShifts { display: flex; flex-direction: column; gap: $space-2; }
+.talentShift {
+    display: flex; align-items: center; gap: $space-4;
+    padding: $space-2 $space-3; border-radius: $radius-sm;
+    background: $color-bg-surface; border: 1px solid $color-border;
+}
+.talentShiftDay { font-size: $font-size-sm; font-weight: $font-weight-medium; color: $color-text-primary; flex: 1; }
+.talentShiftPeriod {
+    font-size: $font-size-xs; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em;
+    color: $color-text-muted;
+    &.am     { color: #0284c7; }
+    &.lounge { color: #7c3aed; }
+    &.pm     { color: #b45309; }
+}
+.talentShiftTime { font-size: $font-size-xs; color: $color-text-muted; }

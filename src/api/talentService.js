@@ -1,21 +1,27 @@
 import axiosInstance from './axios';
+import { getCached, setCached, invalidatePrefixed } from '../utils/apiCache';
 
 export const getTalents = async () => {
-    const response = await axiosInstance.get('/talents/retrieve_talents');
+    const cached = getCached('talents:all');
+    if (cached) return cached;
+    const response = await axiosInstance.get('/talents/');
+    setCached('talents:all', response.data);
     return response.data;
 };
 
 export const getTalent = async (talentId) => {
-    const response = await axiosInstance.get(`/talents/retrieve_talent/${talentId}`);
+    const response = await axiosInstance.get(`/talents/${talentId}`);
     return response.data;
 };
 
 export const createTalent = async (talentData) => {
-    const response = await axiosInstance.post('/talents/create', talentData);
+    const response = await axiosInstance.post('/talents/', talentData);
+    invalidatePrefixed('talents:');
     return response.data;
 };
 
 export const updateTalent = async (talentId, talentData) => {
-    const response = await axiosInstance.put(`/talents/update/${talentId}`, talentData);
+    const response = await axiosInstance.put(`/talents/${talentId}`, talentData);
+    invalidatePrefixed('talents:');
     return response.data;
 };

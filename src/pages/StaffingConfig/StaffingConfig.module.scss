@@ -1,0 +1,159 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+    @include flex-column;
+    gap: $space-8;
+    padding: $space-8;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.header {
+    @include flex-column;
+    gap: $space-1;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    margin: 0;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    padding: $space-10;
+}
+
+.infoBox {
+    background: $color-navy-subtle;
+    border: 1px solid rgba($color-navy, 0.15);
+    border-radius: $radius-md;
+    padding: $space-4 $space-5;
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.6;
+}
+
+.card {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-sm;
+    overflow: hidden;
+}
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.grid {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $color-text-muted;
+        padding: $space-3 $space-5;
+        border-bottom: 1px solid $color-border;
+        text-align: center;
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    td {
+        padding: $space-3 $space-5;
+        border-bottom: 1px solid rgba($color-border, 0.5);
+        text-align: center;
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+}
+
+.roleLabel {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    text-transform: capitalize;
+}
+
+.tierInput {
+    width: 72px;
+    padding: $space-2 $space-3;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background: $color-bg;
+    text-align: center;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        appearance: none;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: $color-navy;
+        box-shadow: 0 0 0 3px rgba($color-navy, 0.1);
+    }
+
+    &.dirty {
+        border-color: $color-gold;
+        background: rgba($color-gold, 0.04);
+    }
+}
+
+.saveBar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-4 $space-5;
+    border-top: 1px solid $color-border;
+    background: $color-bg-surface;
+}
+
+.hint {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+}
+
+.saveBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-2 $space-6;
+    font-size: $font-size-sm;
+
+    &:disabled {
+        opacity: 0.45;
+        cursor: default;
+    }
+}
+
+.tierHeader {
+    &.low  { color: #1A7A4C; }
+    &.med  { color: #B45309; }
+    &.high { color: #C0392B; }
+}

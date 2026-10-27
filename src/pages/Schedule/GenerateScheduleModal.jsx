@@ -3,33 +3,25 @@ import { generateSchedule } from '../../api/scheduleService';
 import { useToast } from '../../components/Toast/Toast';
 import Modal from '../../components/Modal/Modal';
 import { formatError } from '../../utils/errorUtils';
-import styles from './PeriodModal.module.scss'; // Reusing standard modal styles
+import styles from './PeriodModal.module.scss';
 
-export default function GenerateScheduleModal({ isOpen, onClose, onSuccess }) {
+export default function GenerateScheduleModal({ isOpen, onClose, onJobStarted }) {
     const toast = useToast();
-    const [startDate, setStartDate] = useState('');
-    const [isGenerating, setIsGenerating] = useState(false);
-
-    // Find next Monday
-    const getNextMonday = () => {
-        const d = new Date();
-        d.setDate(d.getDate() + (1 + 7 - d.getDay()) % 7 || 7);
-        return d.toISOString().split('T')[0];
-    };
+    const [startDate,    setStartDate]    = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!startDate) return;
-
-        setIsGenerating(true);
+        setIsSubmitting(true);
         try {
-            const result = await generateSchedule(startDate);
-            toast({ message: 'Schedule generated successfully!', type: 'success' });
-            onSuccess(result);
+            const { job_id } = await generateSchedule(startDate);
+            onJobStarted(job_id);
+            onClose();
         } catch (error) {
             toast({ message: formatError(error), type: 'error' });
         } finally {
-            setIsGenerating(false);
+            setIsSubmitting(false);
         }
     };
 
@@ -40,23 +32,23 @@ export default function GenerateScheduleModal({ isOpen, onClose, onSuccess }) {
             title="Generate Weekly Schedule"
             footer={
                 <>
-                    <button className={styles.cancelBtn} onClick={onClose} disabled={isGenerating}>
+                    <button className={styles.cancelBtn} onClick={onClose} disabled={isSubmitting}>
                         Cancel
                     </button>
                     <button
                         className={styles.submitBtn}
                         onClick={handleSubmit}
-                        disabled={!startDate || isGenerating}
+                        disabled={!startDate || isSubmitting}
                     >
-                        {isGenerating ? 'Generating...' : 'Generate Schedule'}
+                        {isSubmitting ? 'Starting…' : 'Generate'}
                     </button>
                 </>
             }
         >
             <form className={styles.form}>
                 <p className={styles.hint}>
-                    Select the starting Monday for the new week. The system will automatically allocate
-                    talents based on your shift templates and availability rules.
+                    The engine will use your saved settings. To adjust occupancy defaults or
+                    data sources, visit <strong>Settings</strong> in the sidebar.
                 </p>
                 <div className={styles.formGroup}>
                     <label>Week Starting (Monday)</label>
@@ -65,15 +57,8 @@ export default function GenerateScheduleModal({ isOpen, onClose, onSuccess }) {
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                         required
-                        min={getNextMonday()}
                     />
                 </div>
-                {isGenerating && (
-                    <div className={styles.loadingOverlay}>
-                        <div className={styles.spinner} />
-                        <p>Running optimization algorithm...</p>
-                    </div>
-                )}
             </form>
         </Modal>
     );
