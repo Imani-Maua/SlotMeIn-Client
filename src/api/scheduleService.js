@@ -3,10 +3,18 @@ import { getCached, setCached, invalidate, invalidatePrefixed } from '../utils/a
 
 // ─── Schedule Generation ──────────────────────────────────────────────────────
 
-export const generateSchedule = async (startDate, occupancyPct) => {
-    const body = { start_date: startDate };
-    if (occupancyPct != null) body.occupancy_pct = occupancyPct;
-    const response = await axiosInstance.post('/schedule/generate', body);
+export const generateSchedule = async (startDate) => {
+    const response = await axiosInstance.post('/schedule/generate', { start_date: startDate });
+    return response.data;
+};
+
+export const getSchedulerConfig = async () => {
+    const response = await axiosInstance.get('/schedule/config');
+    return response.data;
+};
+
+export const saveSchedulerConfig = async (config) => {
+    const response = await axiosInstance.put('/schedule/config', config);
     return response.data;
 };
 
