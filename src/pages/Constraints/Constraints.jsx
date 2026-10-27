@@ -5,6 +5,8 @@ import { useToast } from '../../components/Toast/Toast';
 import Spinner from '../../components/Spinner/Spinner';
 import EmptyState from '../../components/EmptyState/EmptyState';
 import AddConstraintModal from '../Talents/AddConstraintModal';
+import CreateTalentModal from '../Talents/CreateTalentModal';
+import EditTalentModal from '../Talents/EditTalentModal';
 import styles from './Constraints.module.scss';
 
 const CONSTRAINT_TYPE_LABELS = {
@@ -55,6 +57,10 @@ export default function Constraints() {
 
     // Add constraint modal
     const [addModalTalent, setAddModalTalent] = useState(null);
+
+    // Create / edit talent modals
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
+    const [editTalent, setEditTalent] = useState(null);
 
     // ─── Load Data ────────────────────────────────────────────────────────────
 
@@ -161,21 +167,33 @@ export default function Constraints() {
             {/* ── Header ───────────────────────────────────────────────────── */}
             <div className={styles.header}>
                 <div>
-                    <h1 className={styles.title}>Constraints</h1>
+                    <h1 className={styles.title}>Team</h1>
                     <p className={styles.subtitle}>
-                        Manage availability rules and scheduling constraints for your team.
+                        Manage your team members and their scheduling constraints.
                     </p>
                 </div>
-                <button
-                    id="add-constraint-btn"
-                    className={styles.addBtn}
-                    onClick={() => setAddModalTalent('pick')}
-                >
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                        <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                    Add Constraint
-                </button>
+                <div className={styles.headerActions}>
+                    <button
+                        id="add-talent-btn"
+                        className={styles.addBtnSecondary}
+                        onClick={() => setIsCreateOpen(true)}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Talent
+                    </button>
+                    <button
+                        id="add-constraint-btn"
+                        className={styles.addBtn}
+                        onClick={() => setAddModalTalent('pick')}
+                    >
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Constraint
+                    </button>
+                </div>
             </div>
 
             {/* ── Summary Stats ─────────────────────────────────────────────── */}
@@ -257,15 +275,22 @@ export default function Constraints() {
                                 {/* Talent Row */}
                                 <div className={styles.talentRow}>
                                     {/* Avatar */}
-                                    <div className={styles.avatar}>
+                                    <button
+                                        className={styles.avatarBtn}
+                                        onClick={() => setEditTalent(talent)}
+                                        title="Edit talent"
+                                    >
                                         {talent.firstname[0]}{talent.lastname[0]}
-                                    </div>
+                                    </button>
 
                                     {/* Info */}
                                     <div className={styles.talentInfo}>
-                                        <span className={styles.talentName}>
+                                        <button
+                                            className={styles.talentNameBtn}
+                                            onClick={() => setEditTalent(talent)}
+                                        >
                                             {talent.firstname} {talent.lastname}
-                                        </span>
+                                        </button>
                                         <div className={styles.talentMeta}>
                                             <span className={styles.metaBadge}>{talent.tal_role}</span>
                                             <span className={styles.metaDot} />
@@ -393,6 +418,21 @@ export default function Constraints() {
                     })}
                 </div>
             )}
+
+            {/* ── Create Talent Modal ──────────────────────────────────────── */}
+            <CreateTalentModal
+                isOpen={isCreateOpen}
+                onClose={() => setIsCreateOpen(false)}
+                onSuccess={fetchAll}
+            />
+
+            {/* ── Edit Talent Modal ─────────────────────────────────────────── */}
+            <EditTalentModal
+                talent={editTalent}
+                isOpen={!!editTalent}
+                onClose={() => setEditTalent(null)}
+                onSuccess={() => { fetchAll(); setEditTalent(null); }}
+            />
 
             {/* ── Talent Picker Modal (when "Add Constraint" from header) ──── */}
             {addModalTalent === 'pick' && (
