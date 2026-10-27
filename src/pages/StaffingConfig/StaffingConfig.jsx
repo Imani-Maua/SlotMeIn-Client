@@ -35,8 +35,8 @@ export default function StaffingConfig() {
     const toast = useToast();
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
-    const [saved, setSaved] = useState({});
-    const [draft, setDraft] = useState({});
+    const [saved, setSaved] = useState(() => buildGrid([]));
+    const [draft, setDraft] = useState(() => buildGrid([]));
 
     const load = useCallback(async () => {
         setLoading(true);
@@ -98,10 +98,9 @@ export default function StaffingConfig() {
             </div>
 
             <p className={styles.infoBox}>
-                The scheduler uses these counts when building a week&apos;s shift slots.
-                <strong> Low</strong> applies to Mon–Tue, <strong>Medium</strong> to Wed–Thu,
-                and <strong>High</strong> to Fri–Sun — unless the ML predictor overrides the
-                tier based on occupancy percentage.
+                Staffing levels for each day type. Days default to <strong>Quiet</strong> (Mon–Tue),{' '}
+                <strong>Normal</strong> (Wed–Thu) or <strong>Busy</strong> (Fri–Sun), and may shift
+                up or down based on your occupancy forecast.
             </p>
 
             {loading ? (
