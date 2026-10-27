@@ -1,0 +1,312 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.page {
+    @include flex-column;
+    gap: $space-6;
+    padding: $space-8;
+    max-width: 680px;
+    margin: 0 auto;
+}
+
+.header {
+    @include flex-column;
+    gap: $space-1;
+}
+
+.title {
+    font-size: $font-size-2xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    margin: 0;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    padding: $space-10;
+}
+
+// ─── Tabs ─────────────────────────────────────────────────────────────────────
+
+.tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid $color-border;
+}
+
+.tab {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-3 $space-5;
+    background: none;
+    border: none;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    font-family: $font-sans;
+    color: $color-text-muted;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: color $transition-fast, border-color $transition-fast;
+
+    &:hover {
+        color: $color-text-secondary;
+    }
+
+    &.tabActive {
+        color: $color-navy;
+        border-bottom-color: $color-navy;
+    }
+}
+
+.tabDot {
+    width: 6px;
+    height: 6px;
+    border-radius: $radius-full;
+    background: $color-gold;
+    flex-shrink: 0;
+}
+
+// ─── Card ─────────────────────────────────────────────────────────────────────
+
+.card {
+    background: $color-bg-card;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-sm;
+    overflow: hidden;
+}
+
+.cardHeader {
+    @include flex-between;
+    padding: $space-4 $space-5;
+    border-bottom: 1px solid $color-border;
+    gap: $space-4;
+}
+
+.cardTitle {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: $color-text-muted;
+}
+
+.cardNote {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    line-height: 1.6;
+    padding: $space-4 $space-5;
+    display: block;
+    border-bottom: 1px solid $color-border;
+}
+
+// ─── Info tooltip ─────────────────────────────────────────────────────────────
+
+.infoTip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    &:hover .tooltip {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+    }
+}
+
+.infoIcon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: $radius-full;
+    border: 1.5px solid $color-text-muted;
+    color: $color-text-muted;
+    font-size: 11px;
+    font-style: italic;
+    font-weight: $font-weight-semibold;
+    cursor: default;
+    user-select: none;
+    transition: border-color $transition-fast, color $transition-fast;
+
+    .infoTip:hover & {
+        border-color: $color-navy;
+        color: $color-navy;
+    }
+}
+
+.tooltip {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    width: 260px;
+    background: $color-text-primary;
+    color: $color-text-inverse;
+    font-size: $font-size-xs;
+    line-height: 1.6;
+    padding: $space-3 $space-4;
+    border-radius: $radius-md;
+    box-shadow: $shadow-md;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+    transition: opacity $transition-fast, transform $transition-fast;
+    z-index: 10;
+}
+
+// ─── Table ────────────────────────────────────────────────────────────────────
+
+.tableWrap {
+    overflow-x: auto;
+}
+
+.grid {
+    width: 100%;
+    border-collapse: collapse;
+
+    th {
+        font-size: $font-size-xs;
+        font-weight: $font-weight-semibold;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: $color-text-muted;
+        padding: $space-3 $space-5;
+        border-bottom: 1px solid $color-border;
+        text-align: center;
+
+        &:first-child { text-align: left; }
+    }
+
+    td {
+        padding: $space-3 $space-5;
+        border-bottom: 1px solid rgba($color-border, 0.5);
+        text-align: center;
+
+        &:first-child { text-align: left; }
+    }
+
+    tr:last-child td { border-bottom: none; }
+}
+
+.roleLabel {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    text-transform: capitalize;
+}
+
+.numInput {
+    width: 72px;
+    padding: $space-2 $space-3;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    color: $color-text-primary;
+    background: $color-bg;
+    text-align: center;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+    appearance: textfield;
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button { appearance: none; }
+
+    &::placeholder { color: $color-text-muted; }
+
+    &:focus {
+        outline: none;
+        border-color: $color-navy;
+        box-shadow: 0 0 0 3px rgba($color-navy, 0.1);
+    }
+
+    &.dirty {
+        border-color: $color-gold;
+        background: rgba($color-gold, 0.04);
+    }
+}
+
+.tierHeader {
+    &.low  { color: $color-success; }
+    &.med  { color: #B45309; }
+    &.high { color: $color-danger; }
+}
+
+// ─── Weather toggle ───────────────────────────────────────────────────────────
+
+.toggleRow {
+    @include flex-between;
+    padding: $space-5;
+    gap: $space-6;
+}
+
+.toggleLabel {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-primary;
+    margin-bottom: $space-1;
+}
+
+.toggleDesc {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    line-height: 1.5;
+    max-width: 420px;
+}
+
+.toggle {
+    flex-shrink: 0;
+    width: 44px;
+    height: 24px;
+    border-radius: $radius-full;
+    border: none;
+    background: $color-border;
+    cursor: pointer;
+    position: relative;
+    transition: background $transition-fast;
+    padding: 0;
+
+    &.toggleOn { background: $color-navy; }
+}
+
+.toggleThumb {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: $radius-full;
+    background: #fff;
+    box-shadow: $shadow-sm;
+    transition: transform $transition-fast;
+
+    .toggleOn & { transform: translateX(20px); }
+}
+
+// ─── Save bar ─────────────────────────────────────────────────────────────────
+
+.saveBar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-4 $space-5;
+    border-top: 1px solid $color-border;
+    background: $color-bg-surface;
+}
+
+.hint {
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+}
+
+.saveBtn {
+    @include btn-primary;
+    width: auto;
+    padding: $space-2 $space-6;
+    font-size: $font-size-sm;
+}
