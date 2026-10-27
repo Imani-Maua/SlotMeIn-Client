@@ -104,6 +104,16 @@
     font-weight: $font-weight-semibold;
 }
 
+.fullTimeBadge {
+    margin-left: auto;
+    padding: $space-1 $space-2;
+    background: $color-bg-surface;
+    color: $color-text-muted;
+    border-radius: $radius-sm;
+    font-size: $font-size-xs;
+    font-weight: $font-weight-semibold;
+}
+
 // ─── Pickers (Step 2) ─────────────────────────────────────────────────────────
 .pickerGroup {
     @include flex-column;
