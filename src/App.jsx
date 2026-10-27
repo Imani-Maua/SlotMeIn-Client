@@ -6,12 +6,11 @@ import AppLayout from './components/Layout/AppLayout';
 import Login from './pages/Login/Login';
 import AcceptInvite from './pages/AcceptInvite/AcceptInvite';
 import Dashboard from './pages/Dashboard/Dashboard';
-import Talents from './pages/Talents/Talents';
 import ShiftConfig from './pages/ShiftConfig/ShiftConfig';
 import Schedule from './pages/Schedule/Schedule';
 import Users from './pages/Users/Users';
 import Constraints from './pages/Constraints/Constraints';
-import StaffingConfig from './pages/StaffingConfig/StaffingConfig';
+import Settings from './pages/Settings/Settings';
 
 function ProtectedRoute({ children }) {
     const { isAuthenticated } = useAuth();
@@ -38,11 +37,10 @@ function AppRoutes() {
 
             <Route element={<ProtectedRoute><AppLayout /></ProtectedRoute>}>
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/talents" element={<Talents />} />
                 <Route path="/shifts" element={<ShiftConfig />} />
                 <Route path="/schedule" element={<Schedule />} />
                 <Route path="/constraints" element={<Constraints />} />
-                <Route path="/staffing" element={<StaffingConfig />} />
+                <Route path="/settings" element={<Settings />} />
                 <Route path="/admin/users" element={<SuperuserRoute><Users /></SuperuserRoute>} />
             </Route>
 
