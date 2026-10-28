@@ -1,0 +1,278 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.6);
+    backdrop-filter: blur(6px);
+    z-index: 1000;
+    @include flex-center;
+    padding: $space-6;
+    animation: fadeIn 0.2s ease;
+}
+
+.panel {
+    background: $color-bg-card;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.25s ease;
+    @include flex-column;
+}
+
+// ─── Hero ────────────────────────────────────────────────────────────────────
+
+.hero {
+    background: $color-navy;
+    border-radius: $radius-xl $radius-xl 0 0;
+    padding: $space-10 $space-8 $space-8;
+    position: relative;
+    overflow: hidden;
+
+    // Gold shimmer strip at the very top
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, $color-gold-dark, $color-gold, $color-gold-light, $color-gold);
+    }
+
+    // Subtle radial glow in the background
+    &::after {
+        content: '';
+        position: absolute;
+        top: -60px;
+        right: -60px;
+        width: 260px;
+        height: 260px;
+        background: radial-gradient(circle, rgba(212, 168, 67, 0.12) 0%, transparent 70%);
+        pointer-events: none;
+    }
+}
+
+.closeBtn {
+    position: absolute;
+    top: $space-4;
+    right: $space-4;
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-md;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    cursor: pointer;
+    @include flex-center;
+    color: rgba(255, 255, 255, 0.5);
+    transition: background $transition-fast, color $transition-fast;
+    z-index: 1;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: $color-text-inverse;
+    }
+}
+
+.brand {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $color-gold;
+    margin-bottom: $space-4;
+}
+
+.heading {
+    font-size: $font-size-3xl;
+    font-weight: $font-weight-bold;
+    color: $color-text-inverse;
+    margin: 0 0 $space-3;
+    line-height: 1.2;
+}
+
+.subheading {
+    font-size: $font-size-base;
+    color: rgba(255, 255, 255, 0.65);
+    margin: 0;
+    max-width: 420px;
+    line-height: 1.6;
+}
+
+// ─── Body ────────────────────────────────────────────────────────────────────
+
+.body {
+    padding: $space-6 $space-8 $space-8;
+    @include flex-column;
+    gap: $space-6;
+}
+
+// ─── Steps ───────────────────────────────────────────────────────────────────
+
+.steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-4;
+
+    // Last card spans full width when there's an odd count
+    .step:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+
+    @include tablet {
+        grid-template-columns: 1fr;
+
+        .step:last-child:nth-child(odd) {
+            grid-column: auto;
+        }
+    }
+}
+
+.step {
+    background: $color-bg;
+    border: 1px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $space-5;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+    transition: border-color $transition-fast, box-shadow $transition-fast;
+
+    &:hover {
+        border-color: $color-navy-light;
+        box-shadow: $shadow-sm;
+    }
+}
+
+.stepNumber {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.1em;
+    color: $color-gold-dark;
+}
+
+.stepIcon {
+    width: 36px;
+    height: 36px;
+    background: $color-navy-subtle;
+    border-radius: $radius-md;
+    @include flex-center;
+    color: $color-navy;
+    flex-shrink: 0;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+.stepContent {
+    @include flex-column;
+    gap: $space-1;
+}
+
+.stepTitle {
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    color: $color-text-primary;
+    margin: 0;
+}
+
+.stepDesc {
+    font-size: $font-size-xs;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: 1.55;
+}
+
+// ─── Footer ──────────────────────────────────────────────────────────────────
+
+.footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: $space-4;
+    padding-top: $space-2;
+    border-top: 1px solid $color-border;
+}
+
+.skipBtn {
+    background: none;
+    border: none;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-muted;
+    cursor: pointer;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover {
+        color: $color-text-secondary;
+        background: $color-bg-surface;
+    }
+}
+
+.startBtn {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    background: $color-navy;
+    color: $color-text-inverse;
+    border: none;
+    border-radius: $radius-md;
+    padding: $space-3 $space-5;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    font-family: $font-sans;
+    cursor: pointer;
+    transition: background $transition-fast, transform $transition-fast, box-shadow $transition-fast;
+    letter-spacing: 0.02em;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        transition: transform $transition-fast;
+    }
+
+    &:hover {
+        background: $color-navy-dark;
+        transform: translateY(-1px);
+        box-shadow: $shadow-md;
+
+        svg {
+            transform: translateX(3px);
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// ─── Animations ──────────────────────────────────────────────────────────────
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}

@@ -187,6 +187,7 @@ export default function Settings() {
                 {TABS.map(tab => (
                     <button
                         key={tab.key}
+                        data-tutorial={tab.key === 'staffing' ? 'staffing-tab' : tab.key === 'schedule' ? 'schedule-tab' : undefined}
                         className={`${styles.tab} ${activeTab === tab.key ? styles.tabActive : ''}`}
                         onClick={() => setActiveTab(tab.key)}
                     >
