@@ -20,7 +20,8 @@ export const PERIOD_COLOURS = {
     lounge: 'purple',
 };
 
-const PERIOD_LABELS = { am: 'Morning Shift', pm: 'Evening Shift', lounge: 'Lounge' };
+const formatPeriodName = (name) =>
+    name.length <= 2 ? name.toUpperCase() : name.charAt(0).toUpperCase() + name.slice(1);
 
 export default function ShiftConfig() {
     const toast = useToast();
@@ -73,7 +74,7 @@ export default function ShiftConfig() {
     }
 
     async function handleDeletePeriod(period) {
-        if (!window.confirm(`Delete "${PERIOD_LABELS[period.shift_name] || period.shift_name}" and all its templates?`)) return;
+        if (!window.confirm(`Delete "${formatPeriodName(period.shift_name)}" and all its templates?`)) return;
         try {
             await deleteShiftPeriod(period.id);
             toast({ message: 'Shift period deleted.', type: 'success' });
@@ -132,7 +133,7 @@ export default function ShiftConfig() {
                     <p className={styles.subtitle}>Define shift periods and their templates for scheduling.</p>
                 </div>
                 {existingPeriodNames.length < 3 && (
-                    <button className={styles.addBtn} onClick={() => setIsAddPeriodOpen(true)}>
+                    <button data-tutorial="add-shift-period" className={styles.addBtn} onClick={() => setIsAddPeriodOpen(true)}>
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                             <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
@@ -168,7 +169,7 @@ export default function ShiftConfig() {
                                         <div className={`${styles.colourDot} ${styles[`dot_${colour}`]}`} />
                                         <div>
                                             <h2 className={styles.periodName}>
-                                                {PERIOD_LABELS[period.shift_name] || period.shift_name}
+                                                {formatPeriodName(period.shift_name)}
                                             </h2>
                                             <p className={styles.periodTimes}>
                                                 {period.start_time} → {period.end_time}

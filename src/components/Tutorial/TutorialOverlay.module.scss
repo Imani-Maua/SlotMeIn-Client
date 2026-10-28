@@ -1,0 +1,192 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+// ─── Full-screen overlay (pointer-events: none so the app stays interactive) ──
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+}
+
+// ─── Spotlight — box-shadow creates the dark vignette with a cutout ───────────
+
+.spotlight {
+    position: fixed;
+    border-radius: $radius-md;
+    box-shadow: 0 0 0 9999px rgba(17, 24, 39, 0.72);
+    pointer-events: none;
+    transition: top 0.25s ease, left 0.25s ease, width 0.25s ease, height 0.25s ease;
+    z-index: 9001;
+}
+
+// ─── Tooltip card ────────────────────────────────────────────────────────────
+
+.tooltip {
+    position: fixed;
+    width: 320px;
+    background: $color-bg-card;
+    border-radius: $radius-lg;
+    box-shadow: 0 8px 40px rgba(17, 24, 39, 0.28);
+    padding: $space-5;
+    pointer-events: auto; // must be enabled inside the non-interactive overlay
+    z-index: 9002;
+    animation: popIn 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+}
+
+// ─── Tooltip internals ────────────────────────────────────────────────────────
+
+.tooltipTop {
+    @include flex-between;
+}
+
+.counter {
+    font-size: $font-size-xs;
+    font-weight: $font-weight-bold;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-gold-dark;
+}
+
+.exitBtn {
+    width: 28px;
+    height: 28px;
+    border-radius: $radius-md;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    @include flex-center;
+    color: $color-text-muted;
+    transition: background $transition-fast, color $transition-fast;
+    flex-shrink: 0;
+
+    svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    &:hover {
+        background: $color-bg-surface;
+        color: $color-text-primary;
+    }
+}
+
+.title {
+    font-size: $font-size-base;
+    font-weight: $font-weight-bold;
+    color: $color-navy;
+    margin: 0;
+    line-height: 1.3;
+}
+
+.description {
+    font-size: $font-size-sm;
+    color: $color-text-secondary;
+    margin: 0;
+    line-height: 1.6;
+}
+
+// ─── Progress dots ────────────────────────────────────────────────────────────
+
+.dots {
+    display: flex;
+    gap: $space-2;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: $radius-full;
+    background: $color-border;
+    transition: background $transition-fast, width $transition-fast;
+}
+
+.dotActive {
+    background: $color-navy;
+    width: 18px;
+}
+
+// ─── Navigation ───────────────────────────────────────────────────────────────
+
+.nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: $space-1;
+    border-top: 1px solid $color-border;
+    margin-top: $space-1;
+}
+
+.backBtn {
+    background: none;
+    border: none;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-medium;
+    color: $color-text-muted;
+    cursor: pointer;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    transition: color $transition-fast, background $transition-fast;
+
+    &:hover:not(:disabled) {
+        color: $color-text-secondary;
+        background: $color-bg-surface;
+    }
+
+    &:disabled {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.nextBtn {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    background: $color-navy;
+    color: $color-text-inverse;
+    border: none;
+    border-radius: $radius-md;
+    padding: $space-2 $space-4;
+    font-size: $font-size-sm;
+    font-weight: $font-weight-semibold;
+    font-family: $font-sans;
+    cursor: pointer;
+    transition: background $transition-fast, transform $transition-fast;
+    letter-spacing: 0.01em;
+
+    svg {
+        width: 14px;
+        height: 14px;
+        transition: transform $transition-fast;
+    }
+
+    &:hover {
+        background: $color-navy-dark;
+        transform: translateY(-1px);
+
+        svg {
+            transform: translateX(3px);
+        }
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// ─── Animation ───────────────────────────────────────────────────────────────
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.94) translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}

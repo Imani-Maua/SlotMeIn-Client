@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { useJob } from '../../context/JobContext';
 import Sidebar from './Sidebar';
 import Spinner from '../Spinner/Spinner';
+import TutorialOverlay from '../Tutorial/TutorialOverlay';
 import styles from './AppLayout.module.scss';
 
 export default function AppLayout() {
@@ -15,6 +16,7 @@ export default function AppLayout() {
 
     return (
         <div className={styles.layout}>
+            <TutorialOverlay />
             <Sidebar />
             <div className={styles.rightPane}>
                 {pendingJobId && (

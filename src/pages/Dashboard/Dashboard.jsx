@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getTalents } from '../../api/talentService';
 import { getShiftPeriods, getShiftTemplates } from '../../api/shiftService';
 import Spinner from '../../components/Spinner/Spinner';
+import WelcomeModal from '../../components/WelcomeModal/WelcomeModal';
 import styles from './Dashboard.module.scss';
 import { useAuth } from '../../context/AuthContext';
 
@@ -16,6 +17,16 @@ export default function Dashboard() {
         templates: 0
     });
     const [loading, setLoading] = useState(true);
+
+    const welcomeKey = `slotmein_welcomed_${firstname}`;
+    const [showWelcome, setShowWelcome] = useState(
+        () => !localStorage.getItem(welcomeKey)
+    );
+
+    function handleCloseWelcome() {
+        localStorage.setItem(welcomeKey, '1');
+        setShowWelcome(false);
+    }
 
     useEffect(() => {
         async function fetchStats() {
@@ -73,6 +84,8 @@ export default function Dashboard() {
     ];
 
     return (
+        <>
+        <WelcomeModal isOpen={showWelcome} onClose={handleCloseWelcome} firstname={firstname} />
         <div className={styles.page}>
             <div className={styles.header}>
                 <div>
@@ -107,7 +120,7 @@ export default function Dashboard() {
                     <div className={styles.section}>
                         <h2 className={styles.sectionTitle}>Quick Actions</h2>
                         <div className={styles.actionsGrid}>
-                            <div className={styles.actionCard} onClick={() => navigate('/talents')}>
+                            <div className={styles.actionCard} onClick={() => navigate('/constraints')}>
                                 <h3>Manage Talents</h3>
                                 <p>Update staff details, set availability, and manage constraints.</p>
                             </div>
@@ -126,5 +139,6 @@ export default function Dashboard() {
                 </>
             )}
         </div>
+        </>
     );
 }

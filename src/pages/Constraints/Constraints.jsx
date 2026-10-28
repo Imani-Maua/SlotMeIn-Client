@@ -175,6 +175,7 @@ export default function Constraints() {
                 <div className={styles.headerActions}>
                     <button
                         id="add-talent-btn"
+                        data-tutorial="add-talent"
                         className={styles.addBtnSecondary}
                         onClick={() => setIsCreateOpen(true)}
                     >
@@ -185,6 +186,7 @@ export default function Constraints() {
                     </button>
                     <button
                         id="add-constraint-btn"
+                        data-tutorial="add-constraint"
                         className={styles.addBtn}
                         onClick={() => setAddModalTalent('pick')}
                     >

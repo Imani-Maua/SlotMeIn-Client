@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './components/Toast/Toast';
 import { JobProvider } from './context/JobContext';
+import { TutorialProvider } from './context/TutorialContext';
 import AppLayout from './components/Layout/AppLayout';
 import Login from './pages/Login/Login';
 import AcceptInvite from './pages/AcceptInvite/AcceptInvite';
@@ -55,7 +56,9 @@ export default function App() {
             <AuthProvider>
                 <ToastProvider>
                     <JobProvider>
-                        <AppRoutes />
+                        <TutorialProvider>
+                            <AppRoutes />
+                        </TutorialProvider>
                     </JobProvider>
                 </ToastProvider>
             </AuthProvider>
