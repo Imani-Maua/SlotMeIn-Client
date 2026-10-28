@@ -18,13 +18,9 @@ export default function Dashboard() {
     });
     const [loading, setLoading] = useState(true);
 
-    const welcomeKey = `slotmein_welcomed_${firstname}`;
-    const [showWelcome, setShowWelcome] = useState(
-        () => !localStorage.getItem(welcomeKey)
-    );
+    const [showWelcome, setShowWelcome] = useState(true);
 
     function handleCloseWelcome() {
-        localStorage.setItem(welcomeKey, '1');
         setShowWelcome(false);
     }
 
