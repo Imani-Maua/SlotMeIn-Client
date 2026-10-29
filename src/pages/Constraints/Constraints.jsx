@@ -160,8 +160,6 @@ export default function Constraints() {
 
     // ─── Render ───────────────────────────────────────────────────────────────
 
-    if (talentsLoading) return <Spinner fullScreen />;
-
     return (
         <div className={styles.page}>
             {/* ── Header ───────────────────────────────────────────────────── */}
@@ -253,7 +251,9 @@ export default function Constraints() {
             </div>
 
             {/* ── Talent Constraint Cards ───────────────────────────────────── */}
-            {constraintsLoading && talents.length > 0 ? (
+            {talentsLoading ? (
+                <div className={styles.centerSpinner}><Spinner /></div>
+            ) : constraintsLoading && talents.length > 0 ? (
                 <div className={styles.centerSpinner}><Spinner /></div>
             ) : filteredTalents.length === 0 ? (
                 <EmptyState

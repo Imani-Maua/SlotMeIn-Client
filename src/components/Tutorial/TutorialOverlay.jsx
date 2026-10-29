@@ -27,7 +27,7 @@ function useTargetRect(selector, isActive, stepIndex, pathname) {
             }
         }
 
-        timerRef.current = setTimeout(() => attempt(12), 80);
+        timerRef.current = setTimeout(() => attempt(40), 80);
         return () => clearTimeout(timerRef.current);
     }, [selector, isActive, stepIndex, pathname]);
 
@@ -50,10 +50,15 @@ function useTargetRect(selector, isActive, stepIndex, pathname) {
 }
 
 function tooltipPosition(rect) {
-    if (!rect) return { top: 0, left: 0 };
-
     const vw = window.innerWidth;
     const vh = window.innerHeight;
+
+    if (!rect) {
+        return {
+            top:  vh / 2 - TOOLTIP_ESTIMATED_HEIGHT / 2,
+            left: vw / 2 - TOOLTIP_WIDTH / 2,
+        };
+    }
 
     const spotBottom = rect.bottom + PADDING;
     const spotTop = rect.top - PADDING;
